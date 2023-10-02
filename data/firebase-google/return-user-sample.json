@@ -1,0 +1,27 @@
+{
+    "uid": "yqUWG9TvhVZVBjx5fQ24SqOi7Cn2",
+    "email": "yisichoco@gmail.com",
+    "emailVerified": true,
+    "displayName": "SI YI",
+    "isAnonymous": false,
+    "photoURL": "https://lh3.googleusercontent.com/a/AEdFTp44kzQpwoG2SD67f4XBDXm6sXRLGjIaQfb0xd6C=s96-c",
+    "providerData": [
+        {
+            "providerId": "google.com",
+            "uid": "109150685961710971645",
+            "displayName": "SI YI",
+            "email": "yisichoco@gmail.com",
+            "phoneNumber": null,
+            "photoURL": "https://lh3.googleusercontent.com/a/AEdFTp44kzQpwoG2SD67f4XBDXm6sXRLGjIaQfb0xd6C=s96-c"
+        }
+    ],
+    "stsTokenManager": {
+        "refreshToken": "APJWN8chVytkpYSvdydJi4QCROsV4mcarsoShboaUnEpndFLb3SVGeQAI4W4JtvRykSwmiu-nkMz0YFWUAuiOJCFNAzqmdmnyCtLyGQm4M8EwjBbeLimNo6V9Vp4VNUbzCXTntNZnGTKr8LM07sZZk7LwomtGCLJlXe8Wj7uW984EtR4QYPnWpQoXyUEKEBUBuJgo5Wg0dxuGx2dcUXWwDFy0jJJlraAbexiLojuaZG3IYmuyvLHfFdPXfD8JFOqeFdYpYDZ85WmUkZnI3cHavfBOAHkveYxdu4amW_gVvpdT0wJtITPoHjL1hSl0hMvqqV3RlaLi4hiJJ-UEmganvsXQx4zKn4z0OedJzRR4xsiOnfmgyxv6aAR5_EJAZduISlqaH_ZIkQdLORGRFnFk4VeeXF3WiIThw",
+        "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjE1YzJiNDBhYTJmMzIyNzk4NjY2YTZiMzMyYWFhMDNhNjc3MzAxOWIiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU0kgWUkiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUVkRlRwNDRrelFwd29HMlNENjdmNFhCRFhtNnNYUkxHaklhUWZiMHhkNkM9czk2LWMiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcmVhY3QtdGVzdC1lODRmNiIsImF1ZCI6InJlYWN0LXRlc3QtZTg0ZjYiLCJhdXRoX3RpbWUiOjE2NzcwNDU0NTMsInVzZXJfaWQiOiJ5cVVXRzlUdmhWWlZCang1ZlEyNFNxT2k3Q24yIiwic3ViIjoieXFVV0c5VHZoVlpWQmp4NWZRMjRTcU9pN0NuMiIsImlhdCI6MTY3NzA0NTQ1MywiZXhwIjoxNjc3MDQ5MDUzLCJlbWFpbCI6Inlpc2ljaG9jb0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJnb29nbGUuY29tIjpbIjEwOTE1MDY4NTk2MTcxMDk3MTY0NSJdLCJlbWFpbCI6WyJ5aXNpY2hvY29AZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZ29vZ2xlLmNvbSJ9fQ.p79KN5Gsfxzl86rT5LviYq04ouA1A8W7JjFB7jlH7fiynRMmYcXOfIrx4NmrBev21l8Je6bvQuLsgQ2ZlsouTfXk4TfIgzsGHEz4YCr-4Mm-rpwRNpk5NCsl1A90pd6liaCpNPl7UUyYsA0u51rWBaSLy3EOQz8N9Twev_7zPGzMXVQQkgypEnZS3NkCV1Zv77f4Z7eMe1MqazeeJ4x5oo_7eRHzOEnLGYn9ppOE1CRi_mFKCecitfQ1K1IJIbB8cr7Bg9EBCLpz0yBo_MonTalntgl251lm9A3j45RmjWYaAaf8UQiB1ZBwUc7SD-WHFPKexmlX_DkVSl-3oOr4Pg",
+        "expirationTime": 1677049053426
+    },
+    "createdAt": "1676533875424",
+    "lastLoginAt": "1677045453349",
+    "apiKey": "AIzaSyBsIeIzXTdZk4RPiwmuHVi2n27zQOPRjwU",
+    "appName": "[DEFAULT]"
+}

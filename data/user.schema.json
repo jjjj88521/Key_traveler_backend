@@ -1,0 +1,9 @@
+{
+  "id": "int(11) unsigned NOT NULL AUTO_INCREMENT",
+  "name": "varchar(200)",
+  "username": "varchar(200)",
+  "email": "varchar(200)",
+  "password": "varchar(200)",
+  "r_date": "date",
+  "login_datetime": "datetime"
+}

@@ -1,0 +1,27 @@
+{
+  "uid": "uK5IJIGWjcNr0oEqZT6Xs3tKhG62",
+  "email": "yisichoco@gmail.com",
+  "emailVerified": false,
+  "displayName": "Si Yi",
+  "isAnonymous": false,
+  "photoURL": "https://graph.facebook.com/600372848934218/picture",
+  "providerData": [
+    {
+      "providerId": "facebook.com",
+      "uid": "600372848934218",
+      "displayName": "Si Yi",
+      "email": "yisichoco@gmail.com",
+      "phoneNumber": null,
+      "photoURL": "https://graph.facebook.com/600372848934218/picture"
+    }
+  ],
+  "stsTokenManager": {
+    "refreshToken": "AMf-vBxrUkosZlJSVnUz8e9_HxLhfVbYZQXcu0imyoqycOkKsyP0zw0h4GKqTlHFJtbFrfp29HP6SDxxFuQfdM9Y_4MpwEpNKnmSvv84Z-qQ2mscXk8-1CMlZWFXiub7gZuuyD26H3VnYBmYp0jZxj9NckIhzUQjUHJjUd_f9cEzb86r9W_KEWqVjel2SXMPlWtcLtx7e6syY5P2Fa15AzI8wIZC9hP_uqEW-QZVPdXfF3-I-fp9PPZO5SUjhVUICejbotfehTq5v6swuVA6XBYYZ6aA4Jhdx7tSvMuieNqqhTHiyzP8OOKbuuiANwbdsNNqByKHIE1j_qXxvwfc9e1_RsFSXztyFA",
+    "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImNmM2I1YWRhM2NhMzkxNTQ4ZDM1OTJiMzU5MjkyM2UzNjAxMmI5MTQiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU2kgWWkiLCJwaWN0dXJlIjoiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vNjAwMzcyODQ4OTM0MjE4L3BpY3R1cmUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcmVhY3QtdGVzdC1lODRmNiIsImF1ZCI6InJlYWN0LXRlc3QtZTg0ZjYiLCJhdXRoX3RpbWUiOjE2OTE4MjI0MTYsInVzZXJfaWQiOiJ1SzVJSklHV2pjTnIwb0VxWlQ2WHMzdEtoRzYyIiwic3ViIjoidUs1SUpJR1dqY05yMG9FcVpUNlhzM3RLaEc2MiIsImlhdCI6MTY5MTgyMjQxNiwiZXhwIjoxNjkxODI2MDE2LCJlbWFpbCI6Inlpc2ljaG9jb0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZmFjZWJvb2suY29tIjpbIjYwMDM3Mjg0ODkzNDIxOCJdLCJlbWFpbCI6WyJ5aXNpY2hvY29AZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZmFjZWJvb2suY29tIn19.nLsLLNbS7WB6K3gllx41v70y4A_BTQtpmTpTXdfhQ873_7mXcPNxtxvixkjMu-9qllEy0JhZopedT55j2R74Jb6VGxXoWbOT91GLKSM_r5RmunZlujeSp7UQYZLy5wt50RcRxRklTf6So1oQfHEmDcc3CZSJxGoycC4kBEzCbbrx2QGSFVuy-pofUzkksAa3N4_Hwve-vmYleLy6t0iwe0x6zIfxbQDCcKO3iBLneACi4kXomIZzSpKunaa4uKCmTvyFfAPlcQ3HceoGFLnNtYnzFsiAkqExHg64Z1zdD__QH0OgX_pX-PcBquUD1MRYR0vDDRQHxVzYxNVDozyIvQ",
+    "expirationTime": 1691826017184
+  },
+  "createdAt": "1691822416015",
+  "lastLoginAt": "1691822416015",
+  "apiKey": "AIzaSyBsIeIzXTdZk4RPiwmuHVi2n27zQOPRjwU",
+  "appName": "[DEFAULT]"
+}
