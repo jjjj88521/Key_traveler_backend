@@ -13,15 +13,15 @@ router.post('/login', async function (req, res, next) {
   console.log(user)
 
   // 這裡可以再檢查從react來的資料，哪些資料為必要(username, password...)
-  if (!user.username || !user.password) {
+  if (!user.account || !user.password) {
     return res.json({ message: 'fail', code: '400' })
   }
 
-  const { username, password } = user
+  const { account, password } = user
 
   // 先查詢資料庫是否有同username/password的資料
   const isMember = await verifyUser({
-    username,
+    account,
     password,
   })
 
@@ -33,7 +33,7 @@ router.post('/login', async function (req, res, next) {
 
   // 會員存在，將會員的資料取出
   const member = await getUser({
-    username,
+    account,
     password,
   })
 
