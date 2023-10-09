@@ -242,6 +242,7 @@ const count_column = async (table, groupby, where = {}, order = {}) => {
 }
 
 const comment_list = async (table_comment, table_user, article_id) => {
+  console.log('article_id', article_id)
   const sql = sqlString.format(
     `SELECT * FROM ${table_comment}, ${table_user} WHERE article_comment.user_id=users.id and article_comment.article_id=${article_id};`
   )

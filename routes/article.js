@@ -11,6 +11,7 @@ import {
   countWithQS,
   countColumn,
   comment,
+  addComment,
 } from '../models/article.js'
 
 /* 寄送email的路由 */
@@ -33,6 +34,13 @@ router.get('/comment/:commentid', async (req, res, next) => {
   const comments = await comment(req.params.commentid)
   res.json({ comments })
   // 等同於res.json({ cates: cates })，只要{}內的key,value同名 可以合併
+})
+
+router.post('/addComent', async (req, res, next) => {
+  console.log('addComent')
+  console.log(req.body)
+  const comment = await addComment(req.body)
+  res.json({ msg: '成功新增資料' })
 })
 
 // 獲得單筆資料
