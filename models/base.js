@@ -222,6 +222,33 @@ const find = async (table, where = {}, order = {}, limit = 0, offset) => {
 }
 
 /**
+ * standard select
+ * @param {string} table - table name
+ * @param {object|string} where - ex. {id:1, name:'Eddy'}, string is for custom where clause ex.'WHERE id > 0'
+ * @param {object} order - ex. {id: 'asc', name: 'desc', username: ''}
+ * @param {string} groupby - column name
+ * @returns {{rows: Array, fields: Array}}
+ */
+// async(箭頭函式會用到的參數 =>{const sql = sqlString.format(要寫入使用的SQL指令)})
+//指令內容：SELECT cate, (選擇cate欄並顯示種類表，只會列出不同種類各一)
+//COUNT(*) as count (as 像是的意思，改名好辨別) GROUP BY 與COUNT()一起搭配
+const count_column = async (table, groupby, where = {}, order = {}) => {
+  const sql = sqlString.format(
+    `SELECT cate, COUNT(*) as count FROM ${table} ${whereSql(
+      where
+    )} GROUP BY ${groupby} ${orderbySql(order)}`
+  )
+  return await executeQuery(sql)
+}
+
+const comment_list = async (table_comment, table_user, article_id) => {
+  const sql = sqlString.format(
+    `SELECT * FROM ${table_comment}, ${table_user} WHERE article_comment.user_id=users.id and article_comment.article_id=${article_id};`
+  )
+  return await executeQuery(sql)
+}
+
+/**
  * select return just one row
  * @param {string} table - table name
  * @param {object|string} where - ex. {id:1, name:'Eddy'}, string is for custom where clause ex.'WHERE id > 0'
@@ -348,4 +375,6 @@ export {
   testTable,
   update,
   updateById,
+  count_column,
+  comment_list,
 }
