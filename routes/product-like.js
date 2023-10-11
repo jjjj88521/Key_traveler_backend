@@ -1,7 +1,7 @@
 import express from 'express'
 const router = express.Router()
 
-import { count, executeQuery } from '../models/base.js'
+import { count, executeQuery, whereSql, orderbySql } from '../models/base.js'
 
 import authenticate from '../middlewares/jwt.js'
 
@@ -55,34 +55,19 @@ router.get('/all-products', authenticate, async (req, res, next) => {
   res.json({ products })
 })
 
-// router.get('/like-list', authenticate, async (req, res, next) => {
-//   // 取得分頁
-//   const { page } = req.query
-//   const user = req.user
-//   const uid = user.id
-
-//   const sql = `SELECT p.id, p.name, p.price, p.images, p.category_1, p.category_2, p.brand
-// FROM product AS p
-//     INNER JOIN product_like AS pl ON pl.product_id = p.id
-//     AND pl.user_id = ${uid}
-// ORDER BY p.id ASC
-// LIMIT 5 OFFSET ${page * 5 - 5 || 0}`
-
-//   // 取得喜歡商品的總數
-//   const total = await count('product_like', { user_id: uid })
-
-//   const { rows } = await executeQuery(sql)
-
-//   console.log(rows)
-
-//   res.json({ total, page: page || 1, products: rows })
-// })
-
 router.get('/like-list', authenticate, async (req, res, next) => {
   // 获取查询参数cate
-  const { page, cate } = req.query
+  const { page, cate, orderby } = req.query
   const user = req.user
   const uid = user.id
+
+  const whereClosure = cate
+    ? whereSql({ 'pl.user_id': uid, 'pl.cate': cate })
+    : whereSql({ 'pl.user_id': uid })
+
+  const orderbyClosure = orderby
+    ? orderbySql({ [orderby.split(',')[0]]: orderby.split(',')[1] })
+    : orderbySql({ id: 'asc' })
 
   // 將三種商品的資料表都取出，或者根據帶入的 cate 篩選其中一種
   let sql = `
@@ -90,23 +75,21 @@ router.get('/like-list', authenticate, async (req, res, next) => {
   pd.id, pd.name, pd.price, pd.images, pd.category_1, pd.category_2, pd.brand, '一般' AS pd_cate
 FROM product AS pd
 INNER JOIN product_like AS pl ON pl.product_id = pd.id
-WHERE pl.user_id = ${uid} ${cate ? `AND pl.cate = '${cate}'` : ''}
+${whereClosure}
 UNION ALL
 SELECT 
   gb.id, gb.name, gb.price, gb.images, null AS category_1, null AS category_2, gb.brand, '團購' AS pd_cate
 FROM group_buy AS gb
 INNER JOIN product_like AS pl ON pl.product_id = gb.id
-WHERE pl.user_id = ${uid} ${cate ? `AND pl.cate = '${cate}'` : ''}
+${whereClosure}
 UNION ALL
 SELECT 
   rt.id, rt.name, rt.price, rt.images, null AS category_1, null AS category_2, rt.brand, '租用' AS pd_cate
 FROM rent AS rt
 INNER JOIN product_like AS pl ON pl.product_id = rt.id
-WHERE pl.user_id = ${uid} ${cate ? `AND pl.cate = '${cate}'` : ''}
-
+${whereClosure}
+${orderbyClosure}
   `
-
-  sql += ' ORDER BY id ASC'
   sql += ` LIMIT 5 OFFSET ${page * 5 - 5 || 0}`
 
   // 獲取喜歡商品的總數
@@ -125,7 +108,7 @@ WHERE pl.user_id = ${uid} ${cate ? `AND pl.cate = '${cate}'` : ''}
 // 取得該會員是否有收藏此商品
 router.get('/:cate/:pid', authenticate, async (req, res, next) => {
   const { cate, pid } = req.params
-
+  console.log(req.user)
   const user = req.user
   const uid = user.id
 
