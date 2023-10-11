@@ -93,7 +93,7 @@ app.use('/api/google-login', googleLoginRouter)
 app.use('/api/line-login', lineLoginRouter)
 app.use('/api/facebook-login', facebookLoginRouter)
 app.use('/api/favorite', favoriteRouter)
-app.use('/apitest/aticle', articleRouter)
+app.use('/api/article', articleRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404))

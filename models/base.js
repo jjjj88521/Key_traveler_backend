@@ -241,14 +241,25 @@ const count_column = async (table, groupby, where = {}, order = {}) => {
   return await executeQuery(sql)
 }
 
-const comment_list = async (table_comment, table_user, article_id) => {
+const comment_list = async (table_user, table_comment, article_id) => {
   console.log('article_id', article_id)
   const sql = sqlString.format(
-    `SELECT * FROM ${table_comment}, ${table_user} WHERE article_comment.user_id=users.id and article_comment.article_id=${article_id};`
+    `SELECT ${table_comment}.*, ${table_user}.* FROM ${table_comment} INNER JOIN ${table_user} ON ${table_user}.id = ${table_comment}.user_id WHERE article_comment.article_id=${article_id} ORDER BY create_at DESC;`
   )
   return await executeQuery(sql)
 }
 
+// const article_user = async (table, table_user, article_id) => {
+//   console.log('article_id', article_id)
+//   const sql = sqlString.format(
+//     // `SELECT * FROM ${table}, ${table_user} WHERE table.user_id=users.id and article_comment.article_id=${article_id};`
+//     `SELECT ${table_user}.account
+//     FROM ${table}
+//     JOIN ${table_user} ON ${table}.user_id = ${table_user}.id
+//     WHERE ${table}.user_id=${article_id};`
+//   )
+//   return await executeQuery(sql)
+// }
 /**
  * select return just one row
  * @param {string} table - table name
@@ -378,4 +389,5 @@ export {
   updateById,
   count_column,
   comment_list,
+  // article_user,
 }

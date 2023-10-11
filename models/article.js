@@ -8,6 +8,7 @@ import {
   count_column,
   comment_list,
   insertOne,
+  // article_user,
 } from './base.js'
 
 // 定義資料庫表格名稱
@@ -34,6 +35,10 @@ const comment = async (article_id) => {
   const { rows } = await comment_list(table_user, table_comment, article_id)
   return rows
 }
+// const ArtCotentUser = async (article_id) => {
+//   const { rows } = await article_user(table, table_user, article_id)
+//   return rows
+// }
 // 查詢所有cate
 const countColumn = async (groupby = 'cate') => {
   const { rows } = await count_column(table, groupby)
@@ -70,7 +75,8 @@ const countWithQS = async (where = '') => {
 const getArticleById = async (id) => await findOneById(table, id)
 
 // 新增單一comment資料
-const addComment = async (comment) => await insertOne(table_comment, comment)
+const addComment = async (user_id, article_id, comment) =>
+  await insertOne(table_comment, { user_id, article_id, comment })
 
 // 建立大量商品資料用
 const createBulkArticle = async (users) => await insertMany(table, users)
@@ -89,4 +95,5 @@ export {
   countColumn,
   comment,
   addComment,
+  // ArtCotentUser,
 }
