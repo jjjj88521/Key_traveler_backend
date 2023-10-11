@@ -9,7 +9,7 @@ router.get('/send', function (req, res, next) {
   // email內容
   const mailOptions = {
     from: `"key-traveler"<${process.env.SMTP_TO_EMAIL}>`,
-    to: `jjjj88521@gmail.com`,
+    to: `f2erobinchen@gmail.com`,
     subject: '這是一封測試電子郵件',
     text: `你好， \r\n通知你有關第一封郵件的事。\r\n\r\n敬上\r\n鍵之旅人`,
   }
