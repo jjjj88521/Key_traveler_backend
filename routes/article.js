@@ -12,7 +12,9 @@ import {
   countColumn,
   comment,
   addComment,
+  // ArtCotentUser,
 } from '../models/article.js'
+import authenticate from '../middlewares/jwt.js'
 
 /* 寄送email的路由 */
 router.get('/test', function (req, res, next) {})
@@ -28,6 +30,10 @@ router.get('/count_cate', async (req, res, next) => {
   res.json({ cates })
   // 等同於res.json({ cates: cates })，只要{}內的key,value同名 可以合併
 })
+// router.get('/artuser/:artuserid', async (req, res, next) => {
+//   const artuser = await ArtCotentUser(req.params.artuserid)
+//   res.json({ artuser })
+// })
 
 router.get('/comment/:commentid', async (req, res, next) => {
   // 透過sql語法 comments裡的article id都相同
@@ -36,11 +42,25 @@ router.get('/comment/:commentid', async (req, res, next) => {
   // 等同於res.json({ cates: cates })，只要{}內的key,value同名 可以合併
 })
 
-router.post('/addComent', async (req, res, next) => {
-  console.log('addComent')
-  console.log(req.body)
-  const comment = await addComment(req.body)
-  res.json({ msg: '成功新增資料' })
+router.post('/addComment', authenticate, async (req, res, next) => {
+  const user = req.user
+  const user_id = user.id
+  const { article_id, comment } = req.body
+  // console.log(req.body)
+
+  // console.log('addComent')
+  // console.log(req.body)
+  console.log(user)
+  const newComment = await addComment(user_id, article_id, comment)
+  res.json({
+    msg: '成功新增資料',
+    code: '200',
+    newComment: {
+      user_id,
+      article_id,
+      comment,
+    },
+  })
 })
 
 // 獲得單筆資料
