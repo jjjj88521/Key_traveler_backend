@@ -30,6 +30,7 @@ const executeQuery = async (sql, logRows = false, logFields = false) => {
     return { rows, fields }
   } catch (error) {
     console.log('error occurred: ', error)
+    return { rows: [], fields: [], error }
   }
 }
 
@@ -348,4 +349,6 @@ export {
   testTable,
   update,
   updateById,
+  whereSql,
+  orderbySql,
 }
