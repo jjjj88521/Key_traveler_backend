@@ -35,6 +35,7 @@ import lineLoginRouter from './routes/line-login.js'
 import facebookLoginRouter from './routes/facebook-login.js'
 
 import favoriteRouter from './routes/favorite.js'
+import categoryRouter from './routes/category.js'
 
 const app = express()
 
@@ -93,6 +94,7 @@ app.use('/api/google-login', googleLoginRouter)
 app.use('/api/line-login', lineLoginRouter)
 app.use('/api/facebook-login', facebookLoginRouter)
 app.use('/api/favorite', favoriteRouter)
+app.use('/api/category', categoryRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
