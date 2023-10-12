@@ -43,6 +43,30 @@ const countWithQS = async (where = '') => {
   return await count(table, where)
 }
 
+// 算出各個星樹的評論數量
+const conutEachStar = async (pid) => {
+  const sql = sqlString.format(
+    `SELECT starTable.star, COALESCE(comments.count, 0) AS count
+     FROM (
+       SELECT 5 AS star
+       UNION SELECT 4
+       UNION SELECT 3
+       UNION SELECT 2
+       UNION SELECT 1
+     ) AS starTable
+     LEFT JOIN (
+       SELECT star, COUNT(*) AS count
+       FROM ?? 
+       WHERE product_id = ?
+       GROUP BY star
+     ) AS comments
+     ON starTable.star = comments.star`,
+    [table, pid]
+  )
+  const { rows } = await executeQuery(sql)
+  return rows
+}
+
 const getAvgStar = async (pid) => {
   const sql = sqlString.format(
     `SELECT AVG(star) AS avg_star FROM ?? WHERE product_id = ?`,
@@ -55,12 +79,13 @@ const getAvgStar = async (pid) => {
 }
 
 const addComment = async (product_id, user_id, star, comment) => {
-  await insertOne(table, {
+  const rows = await insertOne(table, {
     product_id,
     user_id,
     star,
     comment,
   })
+  return rows
 }
 
-export { getCommentsWithQS, countWithQS, getAvgStar, addComment }
+export { getCommentsWithQS, countWithQS, getAvgStar, addComment, conutEachStar }

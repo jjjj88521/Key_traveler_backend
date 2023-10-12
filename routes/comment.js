@@ -6,6 +6,7 @@ import {
   countWithQS,
   getAvgStar,
   addComment,
+  conutEachStar,
 } from '../models/comment.js'
 import { executeQuery } from '../models/base.js'
 
@@ -48,13 +49,9 @@ router.get('/product/:pid', async (req, res, next) => {
     : { created_time: 'desc' }
 
   // 查詢
-  const total = await countWithQS({ product_id: pid })
+  // const total = await countWithQS({ product_id: pid })
   const starTotal = await countWithQS(where)
-  //   const { rows } = await executeQuery(
-  //     `SELECT AVG(star) AS avg_star FROM comment WHERE product_id = ${pid}`
-  //   )
-  //   const avgStar = Number(rows[0].avg_star).toFixed(1)
-  const avgStar = await getAvgStar(pid)
+  // const avgStar = await getAvgStar(pid)
   const products = await getCommentsWithQS(where, order, limit, offset)
 
   // json回傳範例
@@ -71,13 +68,29 @@ router.get('/product/:pid', async (req, res, next) => {
   // }
 
   const result = {
-    total,
     star: Number(star) || 'all',
-    starTotal,
-    avgStar,
+    starTotal: starTotal,
     perpage: Number(perpage) || 5,
     page: Number(page) || 1,
     data: products,
+  }
+
+  res.json(result)
+})
+
+// 計算各個星數的評論數量及平均星數
+router.get('/product/:pid/count', async (req, res, next) => {
+  const pid = req.params.pid
+  const total = await countWithQS({ product_id: pid })
+
+  const avgStar = await getAvgStar(pid)
+
+  const eachStar = await conutEachStar(pid)
+
+  const result = {
+    total: total,
+    avgStar: avgStar,
+    eachStar: eachStar,
   }
 
   res.json(result)
