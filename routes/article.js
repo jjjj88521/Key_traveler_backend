@@ -14,6 +14,7 @@ import {
   addComment,
   // ArtCotentUser,
 } from '../models/article.js'
+import { executeQuery, count } from '../models/base.js'
 import authenticate from '../middlewares/jwt.js'
 
 /* 寄送email的路由 */
@@ -63,12 +64,69 @@ router.post('/addComment', authenticate, async (req, res, next) => {
   })
 })
 
+// 獲取登入的使用者的收藏文章
+router.get('/like-list', authenticate, async (req, res, next) => {
+  const user_id = req.user.id
+
+  const { cate, page } = req.query
+
+  // const sql = `SELECT a.cate AS cate, COUNT(al.article_id) AS count
+  // FROM article_like AS al
+  // LEFT JOIN article AS a ON al.article_id = a.id
+  // WHERE al.user_id = ${user_id}
+  // GROUP BY a.cate
+  // `
+  const sql = `SELECT
+  a.id AS id,
+  a.title AS title,
+  a.img AS img,
+  a.cate AS cate
+FROM
+  article_like al
+JOIN
+  article a ON al.article_id = a.id
+WHERE
+  al.user_id = ${user_id}
+  ${cate === '全部' || !cate ? '' : `AND a.cate = "${cate}"`}
+LIMIT 5 OFFSET ${page * 5 - 5 || 0}
+  `
+  // 使用者收藏文章的總數
+  const total = await count('article_like', { user_id })
+
+  const { rows } = await executeQuery(sql)
+
+  const result = {
+    total,
+    cate,
+    page: page || 1,
+    article: rows || [],
+  }
+
+  res.json(result)
+})
+
+// 刪除登入的使用者指定的收藏文章
+router.delete('/like/:aid', authenticate, async (req, res, next) => {
+  const user_id = req.user.id
+  const { aid } = req.params
+  // 刪除單筆收藏文章的 sql
+  const sql = `DELETE FROM article_like WHERE article_id = ${aid} AND user_id = ${user_id}`
+
+  const { rows } = await executeQuery(sql)
+
+  if (rows.affectedRows) {
+    return res.json({ message: '已移除收藏', code: '200' })
+  } else {
+    return res.json({ message: '移除收藏失敗', code: '400' })
+  }
+})
+
 // 獲得單筆資料
-router.get('/:pid', async (req, res, next) => {
+router.get('/:aid', async (req, res, next) => {
   console.log(req.params)
 
   // 讀入範例資料
-  const singleArticle = await getArticleById(req.params.pid)
+  const singleArticle = await getArticleById(req.params.aid)
 
   if (singleArticle) {
     return res.json({ ...singleArticle })
@@ -76,4 +134,5 @@ router.get('/:pid', async (req, res, next) => {
     return res.json({})
   }
 })
+
 export default router
