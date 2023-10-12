@@ -41,6 +41,7 @@ router.get('/:userId', async function (req, res, next) {
 router.post('/upload', async function (req, res, next) {
   // req.files 所有上傳來的檔案
   // req.body 其它的文字欄位資料…
+  //
   console.log(req.files, req.body)
 
   if (req.files) {
