@@ -33,6 +33,7 @@ import usersRouter from './routes/users.js'
 import googleLoginRouter from './routes/google-login.js'
 import lineLoginRouter from './routes/line-login.js'
 import facebookLoginRouter from './routes/facebook-login.js'
+import couponRouter from './routes/coupon.js'
 
 import favoriteRouter from './routes/favorite.js'
 
@@ -93,6 +94,7 @@ app.use('/api/google-login', googleLoginRouter)
 app.use('/api/line-login', lineLoginRouter)
 app.use('/api/facebook-login', facebookLoginRouter)
 app.use('/api/favorite', favoriteRouter)
+app.use('/api/coupon', couponRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
