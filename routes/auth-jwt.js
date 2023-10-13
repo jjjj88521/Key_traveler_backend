@@ -27,10 +27,10 @@ router.get('/check-login', authenticate, async (req, res) => {
 
 router.post('/login', async (req, res) => {
   console.log(req.body)
-  // 從要求的req.body獲取username與password
+  // 從要求的req.body獲取account與password
   const { account, password } = req.body
 
-  // 先查詢資料庫是否有同username/password的資料
+  // 先查詢資料庫是否有同account/password的資料
   const isMember = await verifyUser({
     account,
     password,
