@@ -41,7 +41,7 @@ const app = express()
 
 // 檔案上傳
 // 選項參考: https://github.com/richardgirges/express-fileupload
-app.use(fileUpload())
+// app.use(fileUpload())
 
 // 可以使用的CORS要求，options必要
 // app.use(cors())

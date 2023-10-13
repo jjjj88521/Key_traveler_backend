@@ -41,6 +41,7 @@ router.get('/:userId', async function (req, res, next) {
 router.post('/upload', async function (req, res, next) {
   // req.files 所有上傳來的檔案
   // req.body 其它的文字欄位資料…
+  //
   console.log(req.files, req.body)
 
   if (req.files) {
@@ -65,7 +66,11 @@ router.post(
 
     if (req.file) {
       console.log(req.file)
-      return res.json({ message: 'success', code: '200' })
+      return res.json({
+        message: 'success',
+        code: '200',
+        filename: req.file.filename,
+      })
     } else {
       console.log('沒有上傳檔案')
       return res.json({ message: 'fail', code: '409' })
@@ -80,7 +85,7 @@ router.post('/', async function (req, res, next) {
   // {
   //     "name":"金妮",
   //     "email":"ginny@test.com",
-  //     "username":"ginny",
+  //     "account":"ginny",
   //     "password":"12345"
   // }
 
@@ -92,18 +97,18 @@ router.post('/', async function (req, res, next) {
     return res.json({ message: 'fail', code: '400' })
   }
 
-  // 這裡可以再檢查從react來的資料，哪些資料為必要(name, username...)
+  // 這裡可以再檢查從react來的資料，哪些資料為必要(name, account...)
   console.log(user)
 
   // 先查詢資料庫是否有同username與email的資料
   const count = await getCount({
-    username: user.username,
+    account: user.account,
     email: user.email,
   })
 
   // 檢查使用者是否存在
   if (count) {
-    return res.json({ message: 'fail', code: '400' })
+    return res.json({ message: 'fail same', code: '400' })
   }
 
   // 新增至資料庫
@@ -123,10 +128,11 @@ router.post('/', async function (req, res, next) {
 })
 
 // PUT - 更新會員資料
-router.put('/:userId', async function (req, res, next) {
-  const userId = req.params.userId
+router.put('/update', async function (req, res, next) {
+  const userId = req.body.id
   const user = req.body
-  console.log(userId, user)
+  console.log(userId)
+  console.log(user)
 
   // 檢查是否有從網址上得到userId
   // 檢查從瀏覽器來的資料，如果為空物件則失敗
@@ -134,7 +140,7 @@ router.put('/:userId', async function (req, res, next) {
     return res.json({ message: 'error', code: '400' })
   }
 
-  // 這裡可以再檢查從react來的資料，哪些資料為必要(name, username...)
+  // 這裡可以再檢查從react來的資料，哪些資料為必要(name, account...)
   console.log(user)
 
   // 對資料庫執行update
