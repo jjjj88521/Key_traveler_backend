@@ -30,11 +30,11 @@ const updateUserById = async (user, id) => await updateById(table, user, id)
 const updateUser = async (user) => await updateById(table, user, user.id)
 
 // 登入使用
-const verifyUser = async ({ username, password }) =>
-  Boolean(await count(table, { username, password }))
+const verifyUser = async ({ account, password }) =>
+  Boolean(await count(table, { account, password }))
 
-const getUser = async ({ username, password }) =>
-  await findOne(table, { username, password })
+const getUser = async ({ account, password }) =>
+  await findOne(table, { account, password })
 
 // 其它用途
 const cleanAll = async () => await cleanTable(table)

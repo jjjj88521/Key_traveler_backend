@@ -11,6 +11,7 @@ import {
 } from '../models/products.js'
 // 專用處理sql字串的工具，主要format與escape，防止sql injection
 import sqlString from 'sqlstring'
+import { executeQuery } from '../models/base.js'
 
 // 獲得所有資料，加入分頁與搜尋字串功能，單一資料表處理
 // products/qs?page=1&keyword=xxxx&cat_ids=1,2&sizes=1,2&tags=3,4&colors=1,2,3&orderby=id,asc&perpage=10&price_range=1500,10000
@@ -127,6 +128,28 @@ router.get('/:pid', async (req, res, next) => {
     return res.json({ ...product })
   } else {
     return res.json({})
+  }
+})
+
+// 獲取你可能會喜歡的商品
+router.get('/:pid/maybe-like', async (req, res, next) => {
+  const { pid } = req.params
+
+  // 隨機挑八個相同分類的商品
+  const sql = `SELECT id, name, brand, category_1, category_2, price, images, stock
+               FROM product
+               WHERE id NOT IN (${pid}) AND stock != 0
+               AND category_1 IN (SELECT category_1 FROM product WHERE id = ${pid})
+               AND category_2 IN (SELECT category_2 FROM product WHERE id = ${pid})
+               ORDER BY RAND()
+               LIMIT 8`
+
+  const { rows } = await executeQuery(sql)
+
+  if (rows.length > 0) {
+    return res.json(rows)
+  } else {
+    return res.json([])
   }
 })
 
