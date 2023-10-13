@@ -66,7 +66,11 @@ router.post(
 
     if (req.file) {
       console.log(req.file)
-      return res.json({ message: 'success', code: '200' })
+      return res.json({
+        message: 'success',
+        code: '200',
+        filename: req.file.filename,
+      })
     } else {
       console.log('沒有上傳檔案')
       return res.json({ message: 'fail', code: '409' })
