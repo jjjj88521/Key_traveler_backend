@@ -20,10 +20,12 @@ router.get('/qs', async (req, res, next) => {
   const {
     page,
     keyword,
-    cat_ids,
-    colors,
-    tags,
-    sizes,
+    // cat_ids,
+    cate_1,
+    cate_2,
+    // colors,
+    // tags,
+    // sizes,
     orderby,
     perpage,
     price_range,
@@ -35,42 +37,50 @@ router.get('/qs', async (req, res, next) => {
   const conditions = []
 
   // 關鍵字 keyword 使用 `name LIKE '%keyword%'`
-  conditions[0] = keyword
-    ? `name LIKE ${sqlString.escape('%' + keyword + '%')}`
-    : ''
+  //   conditions[0] = keyword
+  //     ? `name LIKE ${sqlString.escape('%' + keyword + '%')}`
+  //     : ''
+
+  conditions.push(
+    keyword ? `name LIKE ${sqlString.escape('%' + keyword + '%')}` : ''
+  )
 
   // 分類，cat_id 使用 `cat_id IN (1, 2, 3, 4, 5)`
-  conditions[1] = cat_ids ? `cat_id IN (${cat_ids})` : ''
+  //   conditions[1] = cat_ids ? `cat_id IN (${cat_ids})` : ''
+  conditions.push(cate_1 ? `category_1 IN (${cate_1})` : '')
+  conditions.push(cate_2 ? `category_2 IN (${cate_2})` : '')
+  //   console.log(conditions)
 
   // 顏色: FIND_IN_SET(1, color) OR FIND_IN_SET(2, color)
-  const color_ids = colors ? colors.split(',') : []
-  conditions[2] = color_ids
-    .map((v) => `FIND_IN_SET(${Number(v)}, color)`)
-    .join(' OR ')
+  //   const color_ids = colors ? colors.split(',') : []
+  //   conditions[2] = color_ids
+  //     .map((v) => `FIND_IN_SET(${Number(v)}, color)`)
+  //     .join(' OR ')
 
   //  標籤: FIND_IN_SET(3, tag) OR FIND_IN_SET(2, tag)
-  const tag_ids = tags ? tags.split(',') : []
-  conditions[3] = tag_ids
-    .map((v) => `FIND_IN_SET(${Number(v)}, tag)`)
-    .join(' OR ')
+  //   const tag_ids = tags ? tags.split(',') : []
+  //   conditions[3] = tag_ids
+  //     .map((v) => `FIND_IN_SET(${Number(v)}, tag)`)
+  //     .join(' OR ')
 
   //  尺寸: FIND_IN_SET(3, size) OR FIND_IN_SET(2, size)
-  const size_ids = sizes ? sizes.split(',') : []
-  conditions[4] = size_ids
-    .map((v) => `FIND_IN_SET(${Number(v)}, size)`)
-    .join(' OR ')
+  //   const size_ids = sizes ? sizes.split(',') : []
+  //   conditions[4] = size_ids
+  //     .map((v) => `FIND_IN_SET(${Number(v)}, size)`)
+  //     .join(' OR ')
 
   // 價格
   const priceRanges = price_range ? price_range.split(',') : []
   const min = Number(priceRanges[0])
   const max = Number(priceRanges[1])
   // 價格要介於1500~10000間
-  if (min >= 1500 && max <= 10000) {
-    conditions[5] = `price BETWEEN ${min} AND ${max}`
+  if (min >= 0 && max <= 99999) {
+    conditions.push(`price BETWEEN ${min} AND ${max}`)
   }
 
   //各條件為AND相接(不存在時不加入where從句中)
   const conditionsValues = conditions.filter((v) => v)
+  console.log(conditionsValues)
 
   // 各條件需要先包含在`()`中，因各自內查詢是OR, 與其它的是AND
   const where =
@@ -80,7 +90,7 @@ router.get('/qs', async (req, res, next) => {
 
   // 分頁用
   // page預設為1，perpage預設為10
-  const perpageNow = Number(perpage) || 10
+  const perpageNow = Number(perpage) || 12
   const pageNow = Number(page) || 1
   const limit = perpageNow
   // page=1 offset=0 ; page=2 offset= perpage * 1; ...
@@ -109,8 +119,9 @@ router.get('/qs', async (req, res, next) => {
 
   const result = {
     total,
-    perpage: Number(perpage),
-    page: Number(page),
+    perpage: Number(perpage) || 12,
+    page: Number(page) || 1,
+    price_range,
     data: products,
   }
 

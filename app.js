@@ -36,6 +36,8 @@ import facebookLoginRouter from './routes/facebook-login.js'
 
 import productLikeRouter from './routes/product-like.js'
 import commentRouter from './routes/comment.js'
+import favoriteRouter from './routes/favorite.js'
+import categoryRouter from './routes/category.js'
 
 const app = express()
 
@@ -95,6 +97,8 @@ app.use('/api/line-login', lineLoginRouter)
 app.use('/api/facebook-login', facebookLoginRouter)
 app.use('/api/product-like', productLikeRouter)
 app.use('/api/comment', commentRouter)
+app.use('/api/favorite', favoriteRouter)
+app.use('/api/category', categoryRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
