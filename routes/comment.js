@@ -100,11 +100,19 @@ router.post('/add', authenticate, async (req, res, next) => {
   try {
     const user = req.user
     const user_id = user.id
-    const { product_id, star, comment } = req.body
-    const result = await addComment(product_id, user_id, star, comment)
+    const { product_id, star, comment, style } = req.body
+    const result = await addComment(product_id, user_id, star, comment, style)
+
+    const newComment = {
+      product_id,
+      user_id,
+      star,
+      comment,
+      style,
+    }
 
     if (result) {
-      return res.json({ message: '新增成功', code: '200' })
+      return res.json({ message: '新增成功', code: '200', newComment })
     } else {
       return res.status(400).json({ message: '新增失敗', code: '400' })
     }

@@ -136,9 +136,9 @@ router.get('/:pid/maybe-like', async (req, res, next) => {
   const { pid } = req.params
 
   // 隨機挑八個相同分類的商品
-  const sql = `SELECT id, name, brand, category_1, category_2, price, images
+  const sql = `SELECT id, name, brand, category_1, category_2, price, images, stock
                FROM product
-               WHERE id NOT IN (${pid})
+               WHERE id NOT IN (${pid}) AND stock != 0
                AND category_1 IN (SELECT category_1 FROM product WHERE id = ${pid})
                AND category_2 IN (SELECT category_2 FROM product WHERE id = ${pid})
                ORDER BY RAND()

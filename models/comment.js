@@ -19,19 +19,19 @@ const table = 'comment'
 const getCommentsWithQS = async (where = '', order = {}, limit = 0, offset) => {
   const limitClause = limit ? `LIMIT ${limit}` : ''
   const offsetClause = offset !== undefined ? `OFFSET ${offset}` : ''
+
+  // 將規格為空字串取代為單一規格
   const sql = sqlString.format(
-    `SELECT ??.*, ?? AS user_account, ?? AS user_avatar FROM ?? INNER JOIN ?? ON ?? = ?? ${whereSql(
-      where
-    )} ${orderbySql(order)} ${limitClause} ${offsetClause}`,
-    [
-      table,
-      'users.account',
-      'users.avatar_img',
-      table,
-      'users',
-      'comment.user_id',
-      'users.id',
-    ]
+    `SELECT c.*, u.account AS user_account, u.avatar_img AS user_avatar, 
+    CASE 
+      WHEN c.style = '' THEN '["單一規格"]'
+      ELSE c.style 
+    END AS style
+    FROM ?? AS c
+    INNER JOIN users AS u
+    ON c.user_id = u.id
+    ${whereSql(where)} ${orderbySql(order)} ${limitClause} ${offsetClause}`,
+    [table]
   )
 
   const { rows } = await executeQuery(sql)
@@ -78,12 +78,13 @@ const getAvgStar = async (pid) => {
   return avgStar
 }
 
-const addComment = async (product_id, user_id, star, comment) => {
+const addComment = async (product_id, user_id, star, comment, style) => {
   const rows = await insertOne(table, {
     product_id,
     user_id,
     star,
     comment,
+    style,
   })
   return rows
 }
