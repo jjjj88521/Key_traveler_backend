@@ -33,27 +33,21 @@ router.post('/', async (req, res) => {
 
   const data = rows
   console.log(data)
-  return res.json({ message: '成功讀取', data })
+  return res.json({ message: '成功讀取', data: data })
 })
 
-// router.post('/:orderId', async (req, res) => {
-//   const orderId = req.body.orderId // 从请求体中获取 userId
-//   if (orderId === undefined) {
-//     return res.status(400).json({ error: '缺少 userId 数据' })
-//   }
+router.post('/:orderId', async (req, res) => {
+  const orderId = req.body.orderId // 从请求体中获取 orderId
+  if (orderId === undefined) {
+    return res.status(400).json({ error: '缺少 userId 数据' })
+  }
 
-//   console.log(orderId)
+  console.log(orderId)
 
-// const sql = `SELECT user_order.order_id, coupon.*
-//   FROM user_coupon
-//   JOIN coupon ON user_coupon.coupon_id = coupon.id
-//   WHERE user_coupon.user_id = ${req.user.id} AND coupon.is_valid = 1 AND user_coupon.status = 1 `
-
-//   const sql = `SELECT * FROM user_order WHERE user_id = ${orderId}`
-//   const { rows } = await executeQuery(sql)
-
-//   const data = rows
-//   return res.json({ message: '成功讀取', data })
-// })
+  const sql = `SELECT order_id, product_id FROM user_order_list WHERE order_id = ${orderId}`
+  const { rows } = await executeQuery(sql)
+  const data = rows
+  return res.json({ message: '成功讀取', data })
+})
 
 export default router
