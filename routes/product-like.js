@@ -129,7 +129,13 @@ ${orderbyClosure}
 
   console.log(rows)
 
-  res.json({ total, cate: cate || 'all', page: page || 1, products: rows })
+  res.json({
+    total,
+    cate: cate || 'all',
+    page: page || 1,
+    orderby,
+    products: rows,
+  })
 })
 
 // 取得該會員是否有收藏此商品
