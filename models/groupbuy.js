@@ -1,12 +1,22 @@
 // 資料庫查詢處理函式
-import { find, findOneById, insertMany, cleanTable, count } from './base.js'
+import {
+  find,
+  insertMany,
+  cleanTable,
+  count,
+  executeQuery,
+  whereSql,
+  orderbySql,
+} from './base.js'
+
+import sqlstring from 'sqlstring'
 
 // 定義資料庫表格名稱
 const table = 'group_buy'
 
 // 所需的資料處理函式
 // 查詢所有資料
-const getGroupbuy = async () => {
+const getAllGBList = async () => {
   const { rows } = await find(table)
   return rows
 }
@@ -27,7 +37,7 @@ const getGroupbuy = async () => {
 //        )
 // ORDER BY id
 // LIMIT 0 OFFSET 10;
-const getGroupbuyWithQS = async (where = '', order = {}, limit = 0, offset) => {
+const getGBListWithQS = async (where = '', order = {}, limit = 0, offset) => {
   const { rows } = await find(table, where, order, limit, offset)
   return rows
 }
@@ -38,7 +48,20 @@ const countWithQS = async (where = '') => {
 }
 
 // 查詢單一資料，使用id
-const getProductById = async (id) => await findOneById(table, id)
+const getGroupbuyById = async (id) => {
+  const sql = sqlstring.format(
+    `SELECT *, 
+    CASE
+      WHEN CURDATE() < start THEN 'waiting'
+      WHEN CURDATE() >= start AND CURDATE() <= end THEN 'running'
+      WHEN CURDATE() > end THEN 'end'
+    END AS status
+    FROM ?? WHERE id = ?`,
+    [table, id]
+  )
+  const { rows } = await executeQuery(sql)
+  return rows[0]
+}
 
 // 建立大量商品資料用
 const createBulkGroupbuy = async (users) => await insertMany(table, users)
@@ -48,10 +71,10 @@ const createBulkGroupbuy = async (users) => await insertMany(table, users)
 const cleanAll = async () => await cleanTable(table)
 
 export {
-  getGroupbuy,
-  getGroupbuyWithQS,
-  getProductById,
+  getAllGBList,
+  getGBListWithQS,
+  getGroupbuyById,
   createBulkGroupbuy,
-  cleanAll,
   countWithQS,
+  cleanAll,
 }
