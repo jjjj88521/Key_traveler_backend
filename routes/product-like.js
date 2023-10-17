@@ -139,7 +139,7 @@ ${orderbyClosure}
 })
 
 // 取得該會員是否有收藏此商品
-router.get('/:cate/:pid', authenticate, async (req, res, next) => {
+router.get('/isLike/:cate/:pid', authenticate, async (req, res, next) => {
   const { cate, pid } = req.params
   console.log(req.user)
   const user = req.user

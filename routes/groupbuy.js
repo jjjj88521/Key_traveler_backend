@@ -25,7 +25,7 @@ router.get('/qs', async (req, res, next) => {
     // cat_ids,
     // cate_1,
     // cate_2,
-    status, // 團購狀態 0:即將開團 1:團購中 2:團購結束
+    status, // 團購狀態 wait:即將開團 run:團購中 end:團購結束
     orderby,
     perpage,
     price_range,
@@ -44,6 +44,15 @@ router.get('/qs', async (req, res, next) => {
   conditions.push(
     keyword ? `name LIKE ${sqlString.escape('%' + keyword + '%')}` : ''
   )
+
+  // 篩選團購狀態
+  if (status === 'wait') {
+    conditions.push(`start > NOW()`)
+  } else if (status === 'run') {
+    conditions.push(`start <= NOW() AND end >= NOW()`)
+  } else if (status === 'end') {
+    conditions.push(`end < NOW()`)
+  }
 
   // conditions.push(cate_1 ? `category_1 IN (${cate_1})` : '')
   // conditions.push(cate_2 ? `category_2 IN (${cate_2})` : '')
@@ -87,6 +96,7 @@ router.get('/qs', async (req, res, next) => {
 
   const result = {
     total,
+    status,
     perpage: Number(perpage) || 12,
     page: Number(page) || 1,
     price_range,

@@ -128,6 +128,30 @@ router.get('/qs', async (req, res, next) => {
   res.json(result)
 })
 
+// 獲取該分類商品所有的品牌
+router.get('/brands', async (req, res, next) => {
+  const { cate_1, cate_2 } = req.query
+  let conditions = []
+  conditions.push(cate_1 ? `category_1 = ${cate_1}` : '')
+  conditions.push(cate_2 ? `category_2 = ${cate_2}` : '')
+  const conditionsValues = conditions.filter((v) => v)
+  // console.log(conditionsValues)
+  const where =
+    conditionsValues.length > 0
+      ? `WHERE ` + conditionsValues.map((v) => `( ${v} )`).join(' AND ')
+      : ''
+  const sql = sqlString.format(`SELECT DISTINCT brand FROM ?? ${where}`, [
+    'product',
+  ])
+  const { rows } = await executeQuery(sql)
+  if (rows.length === 0) {
+    return res.json([])
+  } else {
+    const brands = rows.map((v) => v.brand) // 將品牌整理成陣列
+    return res.json(brands)
+  }
+})
+
 // 獲得單筆資料
 router.get('/:pid', async (req, res, next) => {
   console.log(req.params)
