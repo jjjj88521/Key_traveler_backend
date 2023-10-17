@@ -39,7 +39,6 @@ import commentRouter from './routes/comment.js'
 import categoryRouter from './routes/category.js'
 import articleRouter from './routes/article.js'
 import emailUser from './routes/email-user.js'
-import test1 from './routes/test1.js'
 
 const app = express()
 
@@ -103,7 +102,7 @@ app.use('/api/category', categoryRouter)
 app.use('/api/coupon', couponRouter)
 app.use('/api/article', articleRouter)
 app.use('/api/email-user', emailUser)
-app.use('/api/test1', test1)
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404))
