@@ -6,7 +6,7 @@ const table = 'rent'
 
 // 所需的資料處理函式
 // 查詢所有資料
-const getRent = async () => {
+const getAllRentList = async () => {
   const { rows } = await find(table)
   return rows
 }
@@ -27,7 +27,7 @@ const getRent = async () => {
 //        )
 // ORDER BY id
 // LIMIT 0 OFFSET 10;
-const getRentWithQS = async (where = '', order = {}, limit = 0, offset) => {
+const getRentListWithQS = async (where = '', order = {}, limit = 0, offset) => {
   const { rows } = await find(table, where, order, limit, offset)
   return rows
 }
@@ -38,7 +38,7 @@ const countWithQS = async (where = '') => {
 }
 
 // 查詢單一資料，使用id
-const getProductById = async (id) => await findOneById(table, id)
+const getRentById = async (id) => await findOneById(table, id)
 
 // 建立大量商品資料用
 const createBulkRent = async (users) => await insertMany(table, users)
@@ -48,9 +48,9 @@ const createBulkRent = async (users) => await insertMany(table, users)
 const cleanAll = async () => await cleanTable(table)
 
 export {
-  getRent,
-  getRentWithQS,
-  getProductById,
+  getAllRentList,
+  getRentListWithQS,
+  getRentById,
   createBulkRent,
   cleanAll,
   countWithQS,
