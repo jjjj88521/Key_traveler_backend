@@ -140,4 +140,52 @@ router.post('/add', authenticate, async (req, res, next) => {
   }
 })
 
+router.get('/comment', async (req, res) => {
+  const userId = req.body.userId // 從請求體中獲取 userId
+  if (userId === undefined) {
+    return res.status(400).json({ error: '缺少 userId 數據' })
+  }
+
+  // console.log(userId)
+  // `SELECT * FROM comment WHERE user_id = ${userId}`
+  const sql = `SELECT * FROM comment WHERE user_id = ${userId}`
+  const { rows } = await executeQuery(sql)
+
+  const data = rows
+  console.log(data)
+  return res.json({ message: '成功讀取', data: data })
+})
+
+// router.get('/purchase/:orderId', async (req, res) => {
+//   console.log(req)
+//   const orderId = req.params.orderId
+//   if (orderId === undefined) {
+//     return res.status(400).json({ error: '缺少 userId 數據' })
+//   }
+
+//   console.log(orderId)
+
+//   const sql = `
+//   SELECT
+//   uol.amount, uol.spec,
+//   p.id AS product_id,
+//   p.brand,
+//   p.name,
+//   p.price,
+//   p.images
+//   FROM
+//   user_order_list AS uol
+//   JOIN
+//   product AS p ON uol.product_id = p.id
+//   WHERE
+//   uol.order_id = "${orderId}"`
+
+//   // const sql = `
+//   // SELECT * FROM user_order_list WHERE order_id = "${orderId}"`
+//   const { rows } = await executeQuery(sql)
+//   const orderDetails = rows
+//   console.log(rows)
+//   return res.json({ message: '成功讀取', orderDetails })
+// })
+
 export default router

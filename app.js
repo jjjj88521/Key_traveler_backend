@@ -40,7 +40,7 @@ import categoryRouter from './routes/category.js'
 import articleRouter from './routes/article.js'
 import orderRouter from './routes/order.js'
 import test1 from './routes/test1.js'
-
+import user_comment from './routes/user_comment.js'
 const app = express()
 
 // 檔案上傳
@@ -104,6 +104,7 @@ app.use('/api/coupon', couponRouter)
 app.use('/api/article', articleRouter)
 app.use('/api/order', orderRouter)
 app.use('/api/test1', test1)
+app.use('/api/user_comment', user_comment)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404))
