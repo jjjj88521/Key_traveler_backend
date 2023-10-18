@@ -25,7 +25,6 @@ router.get('/qs', async (req, res, next) => {
     // cat_ids,
     // cate_1,
     // cate_2,
-    status, // 團購狀態 0:即將開團 1:團購中 2:團購結束
     orderby,
     perpage,
     price_range,
