@@ -38,6 +38,7 @@ import productLikeRouter from './routes/product-like.js'
 import commentRouter from './routes/comment.js'
 import categoryRouter from './routes/category.js'
 import articleRouter from './routes/article.js'
+import cartRouter from './routes/cart.js'
 
 const app = express()
 
@@ -99,6 +100,7 @@ app.use('/api/product-like', productLikeRouter)
 app.use('/api/comment', commentRouter)
 app.use('/api/category', categoryRouter)
 app.use('/api/coupon', couponRouter)
+app.use('/api/cart', cartRouter)
 app.use('/api/article', articleRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,6 +1,5 @@
 import express from 'express'
 const router = express.Router()
-import { getUserById } from '../models/users.js'
 import {
   getCoupon,
   getCouponWithQS,
@@ -33,6 +32,7 @@ router.get('/', authenticate, async (req, res) => {
     threshold: v.threshold,
     discount_percent: v.discount_percent,
     discount_value: v.discount_value,
+    start_date: v.start_date,
     end_date: v.end_date,
   }))
   // return res.json({ message: 'authorized', rows, user })
