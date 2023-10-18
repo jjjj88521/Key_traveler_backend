@@ -140,15 +140,36 @@ router.post('/add', authenticate, async (req, res, next) => {
   }
 })
 
-router.get('/comment', async (req, res) => {
-  const userId = req.body.userId // 從請求體中獲取 userId
+// router.get('/comment', async (req, res) => {
+//   const userId = req.body.userId // 從請求體中獲取 userId
+//   if (userId === undefined) {
+//     return res.status(400).json({ error: '缺少 userId 數據' })
+//   }
+
+//   console.log(userId)
+
+//   const sql = `SELECT * FROM comment WHERE user_id = ${userId}`
+//   const { rows } = await executeQuery(sql)
+
+//   const data = rows
+//   console.log(data)
+//   return res.json({ message: '成功讀取', data: data })
+// })
+
+router.get('/yet_comment/:comment', async (req, res) => {
+  const userId = req.params.comment // 從請求體中獲取 userId
   if (userId === undefined) {
     return res.status(400).json({ error: '缺少 userId 數據' })
   }
 
-  // console.log(userId)
-  // `SELECT * FROM comment WHERE user_id = ${userId}`
-  const sql = `SELECT * FROM comment WHERE user_id = ${userId}`
+  console.log(userId)
+
+  const sql = `SELECT p.id, p.name, p.brand, p.images, uol.is_comment, uol.spec
+  FROM user_order AS uo
+  JOIN user_order_list AS uol ON uo.id = uol.order_id
+  JOIN product AS p ON uol.product_id = p.id
+  WHERE uo.user_id = '1';`
+
   const { rows } = await executeQuery(sql)
 
   const data = rows
@@ -156,7 +177,7 @@ router.get('/comment', async (req, res) => {
   return res.json({ message: '成功讀取', data: data })
 })
 
-// router.get('/purchase/:orderId', async (req, res) => {
+// router.get('/commented', async (req, res) => {
 //   console.log(req)
 //   const orderId = req.params.orderId
 //   if (orderId === undefined) {
