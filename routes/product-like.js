@@ -56,7 +56,7 @@ router.get('/all-products', authenticate, async (req, res, next) => {
 })
 
 router.get('/like-list', authenticate, async (req, res, next) => {
-  // 获取查询参数cate
+  // 獲取參數
   const { page, cate, orderby } = req.query
   const user = req.user
   const uid = user.id
@@ -72,24 +72,51 @@ router.get('/like-list', authenticate, async (req, res, next) => {
   // 將三種商品的資料表都取出，或者根據帶入的 cate 篩選其中一種
   let sql = `
   SELECT 
-  pd.id, pd.name, pd.price, pd.images, pd.category_1, pd.category_2, pd.brand, '一般' AS pd_cate
-FROM product AS pd
-INNER JOIN product_like AS pl ON pl.product_id = pd.id
-${whereClosure}
-UNION ALL
-SELECT 
-  gb.id, gb.name, gb.price, gb.images, null AS category_1, null AS category_2, gb.brand, '團購' AS pd_cate
-FROM group_buy AS gb
-INNER JOIN product_like AS pl ON pl.product_id = gb.id
-${whereClosure}
-UNION ALL
-SELECT 
-  rt.id, rt.name, rt.price, rt.images, null AS category_1, null AS category_2, rt.brand, '租用' AS pd_cate
-FROM rent AS rt
-INNER JOIN product_like AS pl ON pl.product_id = rt.id
+    CASE
+      WHEN pl.cate = 'pd' THEN pd.id
+      WHEN pl.cate = 'gb' THEN gb.id
+      WHEN pl.cate = 'rt' THEN rt.id
+    END AS id,
+    CASE
+      WHEN pl.cate = 'pd' THEN pd.name
+      WHEN pl.cate = 'gb' THEN gb.name
+      WHEN pl.cate = 'rt' THEN rt.name
+    END AS name,
+    CASE
+      WHEN pl.cate = 'pd' THEN pd.price
+      WHEN pl.cate = 'gb' THEN gb.price
+      WHEN pl.cate = 'rt' THEN rt.price
+    END AS price,
+    CASE
+      WHEN pl.cate = 'pd' THEN pd.images
+      WHEN pl.cate = 'gb' THEN gb.images
+      WHEN pl.cate = 'rt' THEN rt.images
+    END AS images,
+    CASE
+      WHEN pl.cate = 'pd' THEN pd.category_1
+      ELSE null
+    END AS category_1,
+    CASE
+      WHEN pl.cate = 'pd' THEN pd.category_2
+      ELSE null
+    END AS category_2,
+    CASE
+      WHEN pl.cate = 'pd' THEN pd.brand
+      WHEN pl.cate = 'gb' THEN gb.brand
+      WHEN pl.cate = 'rt' THEN rt.brand
+    END AS brand,
+    CASE
+      WHEN pl.cate = 'pd' THEN '一般'
+      WHEN pl.cate = 'gb' THEN '團購'
+      WHEN pl.cate = 'rt' THEN '租用'
+    END AS pd_cate
+FROM product_like AS pl
+LEFT JOIN product AS pd ON pl.cate = 'pd' AND pl.product_id = pd.id
+LEFT JOIN group_buy AS gb ON pl.cate = 'gb' AND pl.product_id = gb.id
+LEFT JOIN rent AS rt ON pl.cate = 'rt' AND pl.product_id = rt.id
 ${whereClosure}
 ${orderbyClosure}
-  `
+`
   sql += ` LIMIT 5 OFFSET ${page * 5 - 5 || 0}`
 
   // 獲取喜歡商品的總數
@@ -102,11 +129,17 @@ ${orderbyClosure}
 
   console.log(rows)
 
-  res.json({ total, cate: cate || 'all', page: page || 1, products: rows })
+  res.json({
+    total,
+    cate: cate || 'all',
+    page: page || 1,
+    orderby,
+    products: rows,
+  })
 })
 
 // 取得該會員是否有收藏此商品
-router.get('/:cate/:pid', authenticate, async (req, res, next) => {
+router.get('/isLike/:cate/:pid', authenticate, async (req, res, next) => {
   const { cate, pid } = req.params
   console.log(req.user)
   const user = req.user

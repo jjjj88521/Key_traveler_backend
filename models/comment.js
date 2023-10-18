@@ -22,7 +22,7 @@ const getCommentsWithQS = async (where = '', order = {}, limit = 0, offset) => {
 
   // 將規格為空字串取代為單一規格
   const sql = sqlString.format(
-    `SELECT c.*, u.account AS user_account, u.avatar_img AS user_avatar, 
+    `SELECT c.*, u.account AS user_account, u.avatar AS user_avatar, 
     CASE 
       WHEN c.style = '' THEN '["單一規格"]'
       ELSE c.style 
