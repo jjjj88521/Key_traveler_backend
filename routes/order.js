@@ -21,7 +21,7 @@ import pool from '../config/db.js'
 // })
 
 router.post('/user_order', async (req, res) => {
-  const userId = req.body.userId // 从请求体中获取 userId
+  const userId = req.body.userId // 從請求體中獲取 userId
   if (userId === undefined) {
     return res.status(400).json({ error: '缺少 userId 數據' })
   }
@@ -37,7 +37,7 @@ router.post('/user_order', async (req, res) => {
 })
 
 router.post('/group_order', async (req, res) => {
-  const userId = req.body.userId // 从请求体中获取 userId
+  const userId = req.body.userId // 從請求體中獲取 userId
   if (userId === undefined) {
     return res.status(400).json({ error: '缺少 userId 數據' })
   }
@@ -53,7 +53,7 @@ router.post('/group_order', async (req, res) => {
 })
 
 router.post('/rent_order', async (req, res) => {
-  const userId = req.body.userId // 从请求体中获取 userId
+  const userId = req.body.userId // 從請求體中獲取 userId
   if (userId === undefined) {
     return res.status(400).json({ error: '缺少 userId 數據' })
   }
@@ -79,7 +79,7 @@ router.get('/purchase/:orderId', async (req, res) => {
 
   const sql = `
   SELECT
-  uol.amount,
+  uol.amount, uol.spec,
   p.id AS product_id,
   p.brand,
   p.name,
@@ -111,16 +111,16 @@ router.get('/group/:orderId', async (req, res) => {
 
   const sql = `
   SELECT
-  gol.amount,
-  p.id AS product_id,
-  p.brand,
-  p.name,
-  p.price,
-  p.images
+  gol.amount, gol.spec,
+  gb.id AS product_id,
+  gb.brand,
+  gb.name,
+  gb.price,
+  gb.images
   FROM
   group_order_list AS gol
   JOIN
-  product AS p ON gol.product_id = p.id
+  group_buy AS gb ON gol.product_id = gb.id
   WHERE
   gol.order_id = "${orderId}"`
 
@@ -130,33 +130,33 @@ router.get('/group/:orderId', async (req, res) => {
   return res.json({ message: '成功讀取', orderDetails })
 })
 
-// router.get('/rent/:orderId', async (req, res) => {
-//   console.log(req)
-//   const orderId = req.params.orderId
-//   if (orderId === undefined) {
-//     return res.status(400).json({ error: '缺少 userId 數據' })
-//   }
+router.get('/rent/:orderId', async (req, res) => {
+  console.log(req)
+  const orderId = req.params.orderId
+  if (orderId === undefined) {
+    return res.status(400).json({ error: '缺少 userId 數據' })
+  }
 
-//   console.log(orderId)
+  console.log(orderId)
 
-//   const sql = `
-//   SELECT
-//   ro.amount,
-//   p.id AS product_id,
-//   p.brand,
-//   p.name,
-//   p.price,
-//   p.images
-//   FROM
-//   rent_order AS ro
-//   JOIN
-//   product AS p ON ro.rent_id = p.id
-//   WHERE
-//   ro.order_id = "${orderId}"`
+  const sql = `
+  SELECT
+  ro.start, ro.end, ro.rental_days, ro.spec,
+  r.id AS rent_id,
+  r.brand,
+  r.name,
+  r.price,
+  r.images
+  FROM
+  rent_order AS ro
+  JOIN
+  rent AS r ON ro.rent_id = r.id
+  WHERE
+  ro.id = "${orderId}"`
 
-//   const { rows } = await executeQuery(sql)
-//   const orderDetails = rows
-//   console.log(rows)
-//   return res.json({ message: '成功讀取', orderDetails })
-// })
+  const { rows } = await executeQuery(sql)
+  const orderDetails = rows
+  console.log(rows)
+  return res.json({ message: '成功讀取', orderDetails })
+})
 export default router
