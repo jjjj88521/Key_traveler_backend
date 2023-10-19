@@ -128,8 +128,22 @@ router.get('/:aid', async (req, res, next) => {
   // 讀入範例資料
   const singleArticle = await getArticleById(req.params.aid)
 
+  // 找作者
+  const authorSql = `SELECT 
+                      CASE 
+                        WHEN a.user_id = 0 THEN '鍵之旅人' 
+                        ELSE u.account
+                        END AS author 
+                      FROM article a 
+                      LEFT JOIN users u ON a.user_id = u.id 
+                      WHERE a.id=${req.params.aid}`
+
+  const { rows } = await executeQuery(authorSql)
+  console.log(rows)
+  const author = rows[0].author
+
   if (singleArticle) {
-    return res.json({ ...singleArticle })
+    return res.json({ ...singleArticle, author })
   } else {
     return res.json({})
   }
