@@ -1,5 +1,6 @@
 import express from 'express'
 const router = express.Router()
+import pool from '../config/db.js'
 
 // 檢查空物件
 import { isEmpty } from '../utils/tool.js'
@@ -24,6 +25,7 @@ import {
   updateUserById,
   verifyUser,
 } from '../models/users.js'
+import { executeQuery } from '../models/base.js'
 
 // GET - 得到所有會員資料
 router.get('/', async function (req, res, next) {
@@ -117,6 +119,13 @@ router.post('/', async function (req, res, next) {
   // 不存在insertId -> 新增失敗
   if (!result.insertId) {
     return res.json({ message: 'fail', code: '400' })
+  }
+  // 新增該優惠碼的id到user_coupon
+  const coupon = `SELECT id FROM coupon WHERE vip_id = 0`
+  const { rows } = await executeQuery(coupon)
+  for (const v of rows) {
+    const updateUserCoupon = `INSERT INTO user_coupon (user_id, coupon_id, status) VALUES (${result.insertId},${v.id} , 1)`
+    await pool.execute(updateUserCoupon)
   }
 
   // 成功加入資料庫的回應
