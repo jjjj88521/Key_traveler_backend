@@ -63,11 +63,29 @@ router.post('/addComment', authenticate, async (req, res, next) => {
     },
   })
 })
+//新增使用者開箱文
+router.post('/addForm', async (req, res, next) => {
+  console.log(req)
+})
+router.post('/1123', async function (req, res, next) {
+  console.log(req.body)
+  const { title, content, cateSelect } = req.body
+  // console.log(res)
 
-// router.post('/', authenticate, async (req, res, next) => {
-// const
-// })
+  try {
+    const sql = `INSERT INTO article (user_id, title, article, cate) VALUES (${title}, ${content}, ${cateSelect}, 1)`
+    const { rows } = await executeQuery(sql)
 
+    if (rows.affectedRows) {
+      return res.json({ message: '已新增貼文', code: '200' })
+    } else {
+      return res.json({ message: '新增貼文失敗', code: '400' })
+    }
+  } catch (error) {
+    console.error('Error adding like:', error)
+    return res.status(500).json({ message: '伺服器錯誤', code: '500' })
+  }
+})
 // 獲取登入的使用者的收藏文章
 router.get('/like-list', authenticate, async (req, res, next) => {
   const user_id = req.user.id
