@@ -12,39 +12,17 @@ import {
 import sqlString from 'sqlstring'
 
 // 定義資料庫表格名稱
-const table = 'user_comment'
+const table = 'comment'
 
-// 所需的資料處理函式
-// 查詢所有資料
-const getUserComment = async () => {
-  const { rows } = await find(table)
-  return rows
-}
-
-// 取得所有該會員的評論
-const getUserCommentsWithQS = async (
-  where = '',
-  order = {},
-  limit = 0,
-  offset
-) => {
-  const { rows } = await find(table, where, order, limit, offset)
-  return rows
-}
-
-// 查詢總數用，加入分頁與搜尋字串功能
-const countWithQS = async (where = '') => {
-  return await count(table, where)
-}
-
-const addComment = async (product_id, user_id, star, description) => {
+const addComment = async (product_id, user_id, star, comment, style) => {
   const rows = await insertOne(table, {
     product_id,
     user_id,
     star,
-    description,
+    comment,
+    style,
   })
   return rows
 }
 
-export { getUserComment, getUserCommentsWithQS, countWithQS, addComment }
+export { addComment }
