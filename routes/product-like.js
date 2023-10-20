@@ -6,18 +6,67 @@ import { count, executeQuery, whereSql, orderbySql } from '../models/base.js'
 import authenticate from '../middlewares/jwt.js'
 
 // 獲得某會員id的有加入到我的最愛清單中的商品id們
+// router.get('/my-favorite', authenticate, async (req, res, next) => {
+//   const { cate } = req.query
+//   const sql = `SELECT pl.product_id
+//         FROM product_like AS pl
+//         WHERE pl.user_id = ${req.user.id} AND cate = '${cate}'
+//         ORDER BY pl.product_id ASC;`
+
+//   const { rows } = await executeQuery(sql)
+//   // 將結果中的pid取出變為一個純資料的陣列
+//   const favorites = rows.map((v) => v.product_id)
+
+//   res.json({ favorites })
+// })
+
+// 修改 /my-favorite 路由以取得不同類別的收藏商品
 router.get('/my-favorite', authenticate, async (req, res, next) => {
-  const { cate } = req.query
-  const sql = `SELECT pl.product_id
-        FROM product_like AS pl
-        WHERE pl.user_id = ${req.user.id} AND cate = '${cate}'
-        ORDER BY pl.product_id ASC;`
+  const user = req.user
+  const uid = user.id
 
-  const { rows } = await executeQuery(sql)
-  // 將結果中的pid取出變為一個純資料的陣列
-  const favorites = rows.map((v) => v.product_id)
+  // 查詢一般商品收藏
+  const pdSql = `
+    SELECT p.id
+    FROM product AS p
+    INNER JOIN product_like AS pl ON pl.cate = 'pd' AND pl.product_id = p.id
+    WHERE pl.user_id = ${uid}
+  `
 
-  res.json({ favorites })
+  // 查詢團購商品收藏
+  const gbSql = `
+    SELECT g.id
+    FROM group_buy AS g
+    INNER JOIN product_like AS pl ON pl.cate = 'gb' AND pl.product_id = g.id
+    WHERE pl.user_id = ${uid}
+  `
+
+  // 查詢租用商品收藏
+  const rtSql = `
+    SELECT r.id
+    FROM rent AS r
+    INNER JOIN product_like AS pl ON pl.cate = 'rt' AND pl.product_id = r.id
+    WHERE pl.user_id = ${uid}
+  `
+
+  // 執行查詢
+  const pdResults = await executeQuery(pdSql)
+  const gbResults = await executeQuery(gbSql)
+  const rtResults = await executeQuery(rtSql)
+
+  // 提取各類商品的收藏ID
+  const pdFavorites = pdResults.rows.map((v) => v.id)
+  const gbFavorites = gbResults.rows.map((v) => v.id)
+  const rtFavorites = rtResults.rows.map((v) => v.id)
+
+  // 將結果組合成一個物件
+  const favorites = {
+    pd: pdFavorites,
+    gb: gbFavorites,
+    rt: rtFavorites,
+  }
+
+  res.json(favorites)
 })
 
 router.get('/all-products-no-login', async (req, res, next) => {
@@ -139,7 +188,7 @@ ${orderbyClosure}
 })
 
 // 取得該會員是否有收藏此商品
-router.get('/isLike/:cate/:pid', authenticate, async (req, res, next) => {
+router.get('/isLiked/:cate/:pid', authenticate, async (req, res, next) => {
   const { cate, pid } = req.params
   console.log(req.user)
   const user = req.user

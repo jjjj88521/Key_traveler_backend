@@ -46,13 +46,25 @@ router.get('/qs', async (req, res, next) => {
   )
 
   // 篩選團購狀態
-  if (status === 'wait') {
-    conditions.push(`start > NOW()`)
-  } else if (status === 'run') {
-    conditions.push(`start <= NOW() AND end >= NOW()`)
-  } else if (status === 'end') {
-    conditions.push(`end < NOW()`)
-  }
+  // 狀態值可以是一個字串，如"wait,run"，我們將它分割成陣列
+  const statusValues = status ? status.split(',') : []
+
+  // 創建一個陣列來存放每個狀態值的查詢條件
+  const statusConditions = statusValues.map((value) => {
+    if (value === 'wait') {
+      return `start > NOW()`
+    } else if (value === 'run') {
+      return `start <= NOW() AND end >= NOW()`
+    } else if (value === 'end') {
+      return `end < NOW()`
+    }
+  })
+
+  // 使用 OR 來連接每個狀態查詢條件
+  const combinedStatusCondition = statusConditions.join(' OR ')
+
+  // 將狀態查詢條件添加到條件陣列中
+  conditions.push(combinedStatusCondition)
 
   // conditions.push(cate_1 ? `category_1 IN (${cate_1})` : '')
   // conditions.push(cate_2 ? `category_2 IN (${cate_2})` : '')

@@ -29,6 +29,7 @@ router.get('/qs', async (req, res, next) => {
     orderby,
     perpage,
     price_range,
+    brand,
   } = req.query
 
   // TODO: 這裡可以檢查各query string正確性或給預設值，檢查不足可能會產生查詢錯誤
@@ -44,6 +45,8 @@ router.get('/qs', async (req, res, next) => {
   conditions.push(
     keyword ? `name LIKE ${sqlString.escape('%' + keyword + '%')}` : ''
   )
+
+  conditions.push(brand ? `brand = ${brand}` : '')
 
   // 分類，cat_id 使用 `cat_id IN (1, 2, 3, 4, 5)`
   //   conditions[1] = cat_ids ? `cat_id IN (${cat_ids})` : ''
