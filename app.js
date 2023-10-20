@@ -41,6 +41,7 @@ import articleRouter from './routes/article.js'
 import cartRouter from './routes/cart.js'
 import groupbuyRouter from './routes/groupbuy.js'
 import rentRouter from './routes/rent.js'
+import orderTestRouter from './routes/order-test.js'
 
 const app = express()
 
@@ -106,6 +107,8 @@ app.use('/api/cart', cartRouter)
 app.use('/api/article', articleRouter)
 app.use('/api/groupbuy', groupbuyRouter)
 app.use('/api/rent', rentRouter)
+app.use('/api/order-test', orderTestRouter)
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404))
