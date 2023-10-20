@@ -17,6 +17,7 @@
     "express-session": "^1.17.3",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.0",
+    "line-pay-merchant": "^0.9.0",
     "lodash": "^4.17.21",
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
@@ -27,7 +28,8 @@
     "request": "^2.88.2",
     "secure-compare": "^3.0.1",
     "session-file-store": "^1.5.0",
-    "sqlstring": "^2.3.3"
+    "sqlstring": "^2.3.3",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
