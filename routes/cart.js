@@ -340,6 +340,21 @@ router.post('/rentdate', authenticate, async (req, res) => {
 
   return res.json({ message: 'success', code: '400' })
 })
+// 刪除購物車
+router.post('/deleterent', authenticate, async (req, res) => {
+  const firstSql = `SELECT id,spec FROM cart_rent WHERE user_id = ${req.user.id} AND rent_id = ${req.body.id}`
+  const { rows } = await executeQuery(firstSql)
+  for (const v of rows) {
+    if (JSON.stringify(JSON.parse(v.spec)) === req.body.specData) {
+      const deleteSql = `DELETE FROM cart_rent WHERE id = ${v.id}`
+      await pool.execute(deleteSql)
+
+      return res.json({ message: 'success', code: '200' })
+    }
+  }
+
+  return res.json({ message: 'success', code: '400' })
+})
 // 勾選
 router.post('/checkrent', authenticate, async (req, res) => {
   const firstSql = `SELECT id,is_checked,spec FROM cart_rent WHERE user_id = ${req.user.id} AND rent_id = ${req.body.id}`
