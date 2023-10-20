@@ -42,6 +42,9 @@ import groupbuyRouter from './routes/groupbuy.js'
 import rentRouter from './routes/rent.js'
 import emailUser from './routes/email-user.js'
 
+import orderRouter from './routes/order.js'
+import test1 from './routes/test1.js'
+import user_comment from './routes/user_comment.js'
 const app = express()
 
 // 檔案上傳
@@ -107,6 +110,9 @@ app.use('/api/groupbuy', groupbuyRouter)
 app.use('/api/rent', rentRouter)
 app.use('/api/email-user', emailUser)
 
+app.use('/api/order', orderRouter)
+app.use('/api/test1', test1)
+app.use('/api/user_comment', user_comment)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404))
