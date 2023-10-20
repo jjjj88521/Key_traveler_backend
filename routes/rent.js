@@ -25,7 +25,7 @@ router.get('/qs', async (req, res, next) => {
     // cat_ids,
     // cate_1,
     // cate_2,
-    status, // 團購狀態 0:即將開團 1:團購中 2:團購結束
+    stock,
     orderby,
     perpage,
     price_range,
@@ -44,6 +44,8 @@ router.get('/qs', async (req, res, next) => {
   conditions.push(
     keyword ? `name LIKE ${sqlString.escape('%' + keyword + '%')}` : ''
   )
+
+  conditions.push(stock === 'true' ? `stock > 0` : '')
 
   // conditions.push(cate_1 ? `category_1 IN (${cate_1})` : '')
   // conditions.push(cate_2 ? `category_2 IN (${cate_2})` : '')

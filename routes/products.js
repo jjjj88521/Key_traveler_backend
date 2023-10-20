@@ -23,12 +23,14 @@ router.get('/qs', async (req, res, next) => {
     // cat_ids,
     cate_1,
     cate_2,
+    stock,
     // colors,
     // tags,
     // sizes,
     orderby,
     perpage,
     price_range,
+    brand,
   } = req.query
 
   // TODO: 這裡可以檢查各query string正確性或給預設值，檢查不足可能會產生查詢錯誤
@@ -45,10 +47,13 @@ router.get('/qs', async (req, res, next) => {
     keyword ? `name LIKE ${sqlString.escape('%' + keyword + '%')}` : ''
   )
 
+  conditions.push(brand ? `brand = ${brand}` : '')
+
   // 分類，cat_id 使用 `cat_id IN (1, 2, 3, 4, 5)`
   //   conditions[1] = cat_ids ? `cat_id IN (${cat_ids})` : ''
   conditions.push(cate_1 ? `category_1 IN (${cate_1})` : '')
   conditions.push(cate_2 ? `category_2 IN (${cate_2})` : '')
+  conditions.push(stock ? `stock > 0` : '')
   //   console.log(conditions)
 
   // 顏色: FIND_IN_SET(1, color) OR FIND_IN_SET(2, color)
