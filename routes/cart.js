@@ -4,6 +4,8 @@ import authenticate from '../middlewares/jwt.js'
 import { executeQuery } from '../models/base.js'
 import pool from '../config/db.js'
 
+// router.post("/")
+
 // ===================== 一般商品 =====================
 router.get('/product', authenticate, async (req, res) => {
   const sqlPd = `SELECT product.name, product.images, product.price, cart.is_checked, cart.amount, cart.spec, product.id, product.brand, product.style_select
@@ -262,6 +264,7 @@ router.post('/checkgroupbuy', authenticate, async (req, res) => {
 })
 // 勾選全部
 router.post('/checkallgroupbuy', authenticate, async (req, res) => {
+  const check = req.body.checkAll ? 1 : 0
   const updateSql = `UPDATE cart_group SET is_checked = ${check}`
 
   await pool.execute(updateSql)
@@ -360,6 +363,7 @@ router.post('/checkallrent', authenticate, async (req, res) => {
   const check = req.body.checkAll ? 1 : 0
   const updateSql = `UPDATE cart_rent SET is_checked = ${check}`
 
+  // console.log(updateSql)
   await pool.execute(updateSql)
 
   return res.json({ message: 'success', code: '200' })

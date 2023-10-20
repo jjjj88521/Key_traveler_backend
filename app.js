@@ -41,6 +41,7 @@ import articleRouter from './routes/article.js'
 import cartRouter from './routes/cart.js'
 import groupbuyRouter from './routes/groupbuy.js'
 import rentRouter from './routes/rent.js'
+import orderTestRouter from './routes/order-test.js'
 import emailUser from './routes/email-user.js'
 
 import orderRouter from './routes/order.js'
@@ -110,6 +111,8 @@ app.use('/api/cart', cartRouter)
 app.use('/api/article', articleRouter)
 app.use('/api/groupbuy', groupbuyRouter)
 app.use('/api/rent', rentRouter)
+app.use('/api/order-test', orderTestRouter)
+
 app.use('/api/email-user', emailUser)
 
 app.use('/api/order', orderRouter)
