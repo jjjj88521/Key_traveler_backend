@@ -40,7 +40,7 @@ router.post('/addproduct', authenticate, async (req, res) => {
       v.product_id === req.body.id
     ) {
       const spec = JSON.stringify(req.body.specData)
-      const updateSql = `UPDATE cart SET amount = amount + ${req.body.quantity} WHERE product_id = ${req.body.id} AND spec = '${spec}'`
+      const updateSql = `UPDATE cart SET amount = amount + ${req.body.quantity} WHERE product_id = ${req.body.id} AND spec = '${spec}' AND user_id = ${req.user.id}`
       const [result, fields] = await pool.execute(updateSql)
       if (!result.length) {
         return res.json({
@@ -177,7 +177,7 @@ router.post('/addgroupbuy', authenticate, async (req, res) => {
       const spec = JSON.stringify(req.body.specData)
       const updateSql = `UPDATE cart_group
             SET amount = amount + ${req.body.quantity}
-            WHERE groupbuy_id = ${req.body.id} AND spec = '${spec}'`
+            WHERE groupbuy_id = ${req.body.id} AND spec = '${spec}' AND user_id = ${req.user.id}`
       const [result, fields] = await pool.execute(updateSql)
       if (!result.length) {
         return res.json({
@@ -233,7 +233,6 @@ router.post('/plusgroupbuy', authenticate, async (req, res) => {
 })
 // 刪除購物車
 router.post('/deletegroupbuy', authenticate, async (req, res) => {
-  const test = 'cart_post12345_authenticate'
   const firstSql = `SELECT id,amount,spec FROM cart_group WHERE user_id = ${req.user.id} AND groupbuy_id = ${req.body.id}`
   // 先找出amount
   const { rows } = await executeQuery(firstSql)
@@ -312,7 +311,7 @@ router.post('/addrent', authenticate, async (req, res) => {
       v.rent_id === req.body.id
     ) {
       const spec = JSON.stringify(req.body.specData)
-      const newDateSql = `UPDATE cart_rent SET start = '${req.body.startDate}' , end = '${req.body.endDate}' WHERE rent_id = ${v.rent_id} AND spec = '${spec}'`
+      const newDateSql = `UPDATE cart_rent SET start = '${req.body.startDate}' , end = '${req.body.endDate}' WHERE rent_id = ${v.rent_id} AND spec = '${spec} AND user_id = ${req.user.id}'`
       await pool.execute(newDateSql)
       return res.json({
         message: 'success',
