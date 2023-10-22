@@ -39,9 +39,8 @@ router.post('/addproduct', authenticate, async (req, res) => {
         JSON.stringify(req.body.specData) &&
       v.product_id === req.body.id
     ) {
-      const updateSql = `UPDATE cart
-          SET amount = amount + ${req.body.quantity}
-          WHERE product_id = ${req.body.id}`
+      const spec = JSON.stringify(req.body.specData)
+      const updateSql = `UPDATE cart SET amount = amount + ${req.body.quantity} WHERE product_id = ${req.body.id} AND spec = '${spec}'`
       const [result, fields] = await pool.execute(updateSql)
       if (!result.length) {
         return res.json({
@@ -175,9 +174,10 @@ router.post('/addgroupbuy', authenticate, async (req, res) => {
         JSON.stringify(req.body.specData) &&
       v.groupbuy_id === req.body.id
     ) {
+      const spec = JSON.stringify(req.body.specData)
       const updateSql = `UPDATE cart_group
             SET amount = amount + ${req.body.quantity}
-            WHERE groupbuy_id = ${req.body.id}`
+            WHERE groupbuy_id = ${req.body.id} AND spec = '${spec}'`
       const [result, fields] = await pool.execute(updateSql)
       if (!result.length) {
         return res.json({
@@ -311,7 +311,8 @@ router.post('/addrent', authenticate, async (req, res) => {
         JSON.stringify(req.body.specData) &&
       v.rent_id === req.body.id
     ) {
-      const newDateSql = `UPDATE cart_rent SET start = '${req.body.startDate}' , end = '${req.body.endDate}' WHERE id = ${v.id}`
+      const spec = JSON.stringify(req.body.specData)
+      const newDateSql = `UPDATE cart_rent SET start = '${req.body.startDate}' , end = '${req.body.endDate}' WHERE rent_id = ${v.rent_id} AND spec = '${spec}'`
       await pool.execute(newDateSql)
       return res.json({
         message: 'success',
