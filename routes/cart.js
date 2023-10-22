@@ -29,7 +29,9 @@ router.get('/product', authenticate, async (req, res) => {
 })
 // 新增商品
 router.post('/addproduct', authenticate, async (req, res) => {
-  const { rows } = await executeQuery(`SELECT spec,product_id FROM cart`)
+  const { rows } = await executeQuery(
+    `SELECT spec,product_id FROM cart WHERE user_id = ${req.user.id}`
+  )
 
   for (const v of rows) {
     if (
@@ -39,7 +41,7 @@ router.post('/addproduct', authenticate, async (req, res) => {
     ) {
       const updateSql = `UPDATE cart
           SET amount = amount + ${req.body.quantity}
-          WHERE user_id = ${req.user.id} AND product_id = ${req.body.id}`
+          WHERE product_id = ${req.body.id}`
       const [result, fields] = await pool.execute(updateSql)
       if (!result.length) {
         return res.json({
@@ -133,7 +135,7 @@ router.post('/checkproduct', authenticate, async (req, res) => {
 // 勾選全部
 router.post('/checkallproduct', authenticate, async (req, res) => {
   const check = req.body.checkAll ? 1 : 0
-  const updateSql = `UPDATE cart SET is_checked = ${check}`
+  const updateSql = `UPDATE cart SET is_checked = ${check} WHERE user_id = ${req.user.id}`
 
   await pool.execute(updateSql)
 
@@ -163,7 +165,9 @@ router.get('/groupbuy', authenticate, async (req, res) => {
 })
 // 新增商品
 router.post('/addgroupbuy', authenticate, async (req, res) => {
-  const { rows } = await executeQuery(`SELECT spec,groupbuy_id FROM cart_group`)
+  const { rows } = await executeQuery(
+    `SELECT spec,groupbuy_id FROM cart_group WHERE user_id = ${req.user.id}`
+  )
 
   for (const v of rows) {
     if (
@@ -173,7 +177,7 @@ router.post('/addgroupbuy', authenticate, async (req, res) => {
     ) {
       const updateSql = `UPDATE cart_group
             SET amount = amount + ${req.body.quantity}
-            WHERE user_id = ${req.user.id} AND groupbuy_id = ${req.body.id}`
+            WHERE groupbuy_id = ${req.body.id}`
       const [result, fields] = await pool.execute(updateSql)
       if (!result.length) {
         return res.json({
@@ -265,7 +269,7 @@ router.post('/checkgroupbuy', authenticate, async (req, res) => {
 // 勾選全部
 router.post('/checkallgroupbuy', authenticate, async (req, res) => {
   const check = req.body.checkAll ? 1 : 0
-  const updateSql = `UPDATE cart_group SET is_checked = ${check}`
+  const updateSql = `UPDATE cart_group SET is_checked = ${check} WHERE user_id = ${req.user.id}`
 
   await pool.execute(updateSql)
 
@@ -297,7 +301,9 @@ router.get('/rent', authenticate, async (req, res) => {
 })
 // 新增商品
 router.post('/addrent', authenticate, async (req, res) => {
-  const { rows } = await executeQuery(`SELECT spec,rent_id,id FROM cart_rent`)
+  const { rows } = await executeQuery(
+    `SELECT spec,rent_id,id FROM cart_rent WHERE user_id = ${req.user.id}`
+  )
 
   for (const v of rows) {
     if (
@@ -322,7 +328,9 @@ router.post('/addrent', authenticate, async (req, res) => {
 })
 // 起始日期更改
 router.post('/rentdate', authenticate, async (req, res) => {
-  const { rows } = await executeQuery(`SELECT spec,rent_id,id FROM cart_rent`)
+  const { rows } = await executeQuery(
+    `SELECT spec,rent_id,id FROM cart_rent WHERE user_id = ${req.user.id}`
+  )
 
   for (const v of rows) {
     if (
@@ -335,6 +343,21 @@ router.post('/rentdate', authenticate, async (req, res) => {
         message: 'success',
         code: '201',
       })
+    }
+  }
+
+  return res.json({ message: 'success', code: '400' })
+})
+// 刪除購物車
+router.post('/deleterent', authenticate, async (req, res) => {
+  const firstSql = `SELECT id,spec FROM cart_rent WHERE user_id = ${req.user.id} AND rent_id = ${req.body.id}`
+  const { rows } = await executeQuery(firstSql)
+  for (const v of rows) {
+    if (JSON.stringify(JSON.parse(v.spec)) === req.body.specData) {
+      const deleteSql = `DELETE FROM cart_rent WHERE id = ${v.id}`
+      await pool.execute(deleteSql)
+
+      return res.json({ message: 'success', code: '200' })
     }
   }
 
@@ -361,7 +384,7 @@ router.post('/checkrent', authenticate, async (req, res) => {
 // 勾選全部
 router.post('/checkallrent', authenticate, async (req, res) => {
   const check = req.body.checkAll ? 1 : 0
-  const updateSql = `UPDATE cart_rent SET is_checked = ${check}`
+  const updateSql = `UPDATE cart_rent SET is_checked = ${check} WHERE user_id = ${req.user.id}`
 
   // console.log(updateSql)
   await pool.execute(updateSql)
