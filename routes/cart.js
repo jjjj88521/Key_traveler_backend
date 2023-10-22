@@ -311,7 +311,7 @@ router.post('/addrent', authenticate, async (req, res) => {
       v.rent_id === req.body.id
     ) {
       const spec = JSON.stringify(req.body.specData)
-      const newDateSql = `UPDATE cart_rent SET start = '${req.body.startDate}' , end = '${req.body.endDate}' WHERE rent_id = ${v.rent_id} AND spec = '${spec} AND user_id = ${req.user.id}'`
+      const newDateSql = `UPDATE cart_rent SET start = '${req.body.startDate}' , end = '${req.body.endDate}' WHERE rent_id = ${v.rent_id} AND spec = '${spec}' AND user_id = ${req.user.id}`
       await pool.execute(newDateSql)
       return res.json({
         message: 'success',
