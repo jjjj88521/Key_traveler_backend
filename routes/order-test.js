@@ -106,10 +106,12 @@ router.post('/addRentOrder', authenticate, async (req, res) => {
     const dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1
 
     secondsql1 = `INSERT INTO rent_order (id, user_id,order_date,status,rent_id,start,end,rental_days,spec) VALUES ('${newPId}', ${req.user.id},'${req.body.date}','${req.body.status}',${v.id},'${v.startDate}','${v.endDate}',${dayDiff},'${specData}');`
-    secondsql2 = `DELETE FROM cart_rent WHERE user_id = ${req.user.id} AND rent_id = ${v.id} AND spec = '${specData}';`
+    // secondsql2 = `DELETE FROM cart_rent WHERE user_id = ${req.user.id} AND rent_id = ${v.id} AND spec = '${specData}';`
     await pool.execute(secondsql1)
-    await pool.execute(secondsql2)
+    // await pool.execute(secondsql2)
   }
+  secondsql2 = `DELETE FROM cart_rent WHERE is_checked = 1;`
+  await pool.execute(secondsql2)
 
   return res.json({ message: 'success', code: '200' })
 })
