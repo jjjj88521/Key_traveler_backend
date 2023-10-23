@@ -77,11 +77,12 @@ router.post(
     console.log(req.file, req.body)
 
     if (req.file) {
+      const imageUrl = 'http://localhost:3005/' + req.file.filename
       console.log(req.file)
       return res.json({
         message: 'success',
         code: '200',
-        filename: req.file.filename,
+        filename: imageUrl,
       })
     } else {
       console.log('沒有上傳檔案')

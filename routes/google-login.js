@@ -56,7 +56,7 @@ router.post('/jwt', async function (req, res, next) {
       name: providerData.displayName,
       email: providerData.email,
       google_uid: providerData.uid,
-      photo_url: providerData.photoURL,
+      avatar: providerData.photoURL,
     }
 
     await insertOne('users', newUser)
@@ -119,7 +119,7 @@ router.post('/session', async function (req, res, next) {
       name: providerData.displayName,
       email: providerData.email,
       google_uid: providerData.uid,
-      photo_url: providerData.photoURL,
+      avatar: providerData.photoURL,
     }
 
     await insertOne('users', newUser)
