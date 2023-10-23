@@ -115,4 +115,44 @@ router.post('/addRentOrder', authenticate, async (req, res) => {
 
   return res.json({ message: 'success', code: '200' })
 })
+
+router.get('/getOrderListPd', authenticate, async (req, res) => {
+  const firstsql = `SELECT MAX(CAST(SUBSTR(id, 2) AS SIGNED)) AS now_id FROM user_order;`
+  const { rows } = await executeQuery(firstsql)
+  const newPId =
+    rows[0].now_id < 10
+      ? 'P00' + rows[0].now_id
+      : rows[0].now_id >= 10 && rows[0].now_id < 100
+      ? 'P0' + rows[0].now_id
+      : 'P' + rows[0].now_id
+  console.log(rows)
+  console.log(newPId)
+  return res.json({ message: 'success', code: '200', orderPId: newPId })
+})
+
+router.get('/getOrderListGb', authenticate, async (req, res) => {
+  const firstsql = `SELECT MAX(CAST(SUBSTR(id, 2) AS SIGNED)) AS now_id FROM group_order;`
+  const { rows } = await executeQuery(firstsql)
+  const newGId =
+    rows[0].now_id < 10
+      ? 'G00' + rows[0].now_id
+      : rows[0].now_id >= 10 && rows[0].now_id < 100
+      ? 'G0' + rows[0].now_id
+      : 'G' + rows[0].now_id
+  console.log(firstsql)
+  return res.json({ message: 'success', code: '200', orderGId: newGId })
+})
+
+router.get('/getOrderListR', authenticate, async (req, res) => {
+  const firstsql = `SELECT MAX(CAST(SUBSTR(id, 2) AS SIGNED)) AS now_id FROM rent_order;`
+  const { rows } = await executeQuery(firstsql)
+  const newRId =
+    rows[0].now_id < 10
+      ? 'R00' + rows[0].now_id
+      : rows[0].now_id >= 10 && rows[0].now_id < 100
+      ? 'R0' + rows[0].now_id
+      : 'R' + rows[0].now_id
+  console.log(firstsql)
+  return res.json({ message: 'success', code: '200', orderRId: newRId })
+})
 export default router
