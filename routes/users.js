@@ -10,7 +10,17 @@ import { isEmpty } from '../utils/tool.js'
 
 // 上傳檔案用使用multer(另一方案是使用express-fileupload)
 import multer from 'multer'
-const upload = multer({ dest: 'public/' })
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + Date.now() + '.jpg')
+  },
+})
+
+const upload = multer({ storage: storage })
+// const upload = multer({ dest: 'public/' })
 
 import {
   cleanAll,
