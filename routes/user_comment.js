@@ -66,14 +66,14 @@ router.get('/yet_comment', authenticate, async (req, res) => {
   FROM user_order AS uo
   JOIN user_order_list AS uol ON uo.id = uol.order_id
   JOIN product AS p ON uol.product_id = p.id
-  WHERE uo.user_id = ${userId} AND uol.is_comment = false
+  WHERE uo.user_id = ${userId} AND uol.is_comment = 'false'
   LIMIT 5 OFFSET ${page * 5 - 5 || 0}`
 
   const sqlTotal = `SELECT COUNT(uol.id) AS total
   FROM user_order AS uo
   JOIN user_order_list AS uol ON uo.id = uol.order_id
   JOIN product AS p ON uol.product_id = p.id
-  WHERE uo.user_id = ${userId} AND uol.is_comment = false`
+  WHERE uo.user_id = ${userId} AND uol.is_comment = 'false'`
 
   const { rows: rowsTotal } = await executeQuery(sqlTotal)
   const total = rowsTotal[0].total
