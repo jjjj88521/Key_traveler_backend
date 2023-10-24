@@ -53,8 +53,8 @@ const getGroupbuyById = async (id) => {
     `SELECT *, 
     CASE
       WHEN CURDATE() < start THEN 'waiting'
-      WHEN CURDATE() >= start AND CURDATE() <= end THEN 'running'
-      WHEN CURDATE() > end THEN 'end'
+      WHEN CURDATE() >= start AND CURDATE() < end THEN 'running'
+      WHEN CURDATE() >= end THEN 'end'
     END AS status
     FROM ?? WHERE id = ?`,
     [table, id]

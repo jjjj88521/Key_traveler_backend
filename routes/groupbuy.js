@@ -52,11 +52,11 @@ router.get('/qs', async (req, res, next) => {
   // 創建一個陣列來存放每個狀態值的查詢條件
   const statusConditions = statusValues.map((value) => {
     if (value === 'wait') {
-      return `start > NOW()`
+      return `start > CURDATE()`
     } else if (value === 'run') {
-      return `start <= NOW() AND end >= NOW()`
+      return `start <= CURDATE() AND end > CURDATE()`
     } else if (value === 'end') {
-      return `end < NOW()`
+      return `end <= CURDATE()`
     }
   })
 
