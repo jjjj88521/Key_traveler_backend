@@ -116,7 +116,7 @@ router.get('/like-list', authenticate, async (req, res, next) => {
 
   const orderbyClosure = orderby
     ? orderbySql({ [orderby.split(',')[0]]: orderby.split(',')[1] })
-    : orderbySql({ id: 'asc' })
+    : orderbySql({ 'pl.id': 'desc' })
 
   // 將三種商品的資料表都取出，或者根據帶入的 cate 篩選其中一種
   let sql = `
