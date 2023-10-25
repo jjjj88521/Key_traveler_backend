@@ -21,7 +21,7 @@ router.get('/', authenticate, async (req, res) => {
   const sql = `SELECT user_coupon.coupon_id, coupon.*
   FROM user_coupon
   JOIN coupon ON user_coupon.coupon_id = coupon.id
-  WHERE user_coupon.user_id = ${req.user.id} AND coupon.is_valid = 1 AND user_coupon.status = 1 `
+  WHERE user_coupon.user_id = ${req.user.id} AND coupon.is_valid = 1 AND user_coupon.status = 1 ORDER BY user_coupon.id DESC`
   const { rows } = await executeQuery(sql)
   const coupon = rows.map((v) => ({
     couponId: v.id,
@@ -112,6 +112,28 @@ router.post('/', async (req, res) => {
   WHERE u.id = ${userId}`
   await pool.execute(updateUserCoupon)
   return res.json({ message: 'success', code: '200' })
+})
+
+// 讀取優惠碼
+router.get('/getcouponcode', authenticate, async (req, res) => {
+  const sql = `SELECT *
+  FROM coupon
+  WHERE LENGTH(coupon_code) > 2 AND coupon.end_date > CURDATE();`
+  // const sql = `SELECT user_coupon.coupon_id, coupon.* FROM user_coupon JOIN coupon ON user_coupon.coupon_id = coupon.id WHERE user_coupon.user_id = ${req.user.id} AND coupon.is_valid = 1 AND coupon.end_date > NOW();`
+  const { rows } = await executeQuery(sql)
+  console.log(rows)
+  const coupon = rows.map((v) => ({
+    couponId: v.id,
+    coupon_code: v.coupon_code,
+    // coupon_name: v.coupon_name,
+    description: v.description,
+    threshold: v.threshold,
+    discount_percent: v.discount_percent,
+    discount_value: v.discount_value,
+    start_date: v.start_date,
+    end_date: v.end_date,
+  }))
+  return res.json({ message: 'authorized', coupon })
 })
 
 export default router
