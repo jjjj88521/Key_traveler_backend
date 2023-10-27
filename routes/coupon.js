@@ -106,10 +106,7 @@ router.post('/', async (req, res) => {
   }
 
   // 新增該優惠碼的id到user_coupon
-  const updateUserCoupon = `INSERT INTO user_coupon (user_id, coupon_id, status)
-  SELECT u.id,${result[0].id} , 1
-  FROM users u
-  WHERE u.id = ${userId}`
+  const updateUserCoupon = `INSERT INTO user_coupon (user_id, coupon_id, status) SELECT u.id,${result[0].id} , 1 FROM users u WHERE u.id = ${userId}`
   await pool.execute(updateUserCoupon)
   return res.json({ message: 'success', code: '200' })
 })
