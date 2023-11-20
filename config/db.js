@@ -18,6 +18,8 @@ const pool = mysql.createPool({
   ssl: {
     ca: serverCa,
   },
+  waitForConnections: true,
+  connectTimeout: 30000,
 })
 
 // 啟動時測試連線
