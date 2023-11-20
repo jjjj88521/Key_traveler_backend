@@ -72,7 +72,7 @@ const updateUserCoupon = async (id) => {
   SELECT id 
   FROM coupon 
   WHERE end_date < CURDATE() 
-  AND end_date != '0000-00-00')
+  AND end_date != NULL)
   AND status != 2;`
   await pool.execute(sql1)
 
@@ -83,7 +83,7 @@ const updateUserCoupon = async (id) => {
   SELECT id 
   FROM coupon 
   WHERE end_date < CURDATE() 
-  AND end_date != '0000-00-00')
+  AND end_date != NULL)
   AND status != 2;`
 }
 
