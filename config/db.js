@@ -1,11 +1,15 @@
 // Promise Wrapper
 // https://github.com/sidorares/node-mysql2#using-promise-wrapper
 import mysql from 'mysql2/promise.js'
+import fs from 'fs'
 
 // 讀取.env檔用
 import 'dotenv/config.js'
 
-// 資料庫連結資訊
+// // 資料庫連結資訊
+// const serverCa = [
+//   fs.readFileSync('/var/www/html/DigiCertGlobalRootG2.crt.pem', 'utf8'),
+// ]
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USERNAME,
@@ -13,6 +17,9 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   dateStrings: true, // 轉換日期字串格式用
+  ssl: {
+    rejectUnauthorized: false,
+  },
 })
 
 // 啟動時測試連線
