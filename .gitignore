@@ -39,3 +39,6 @@ data/test_sql
 
 # test by HsienLu
 public
+
+# ssl
+DigiCertGlobalRootG2.crt.pem
