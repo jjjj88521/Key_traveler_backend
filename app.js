@@ -57,7 +57,12 @@ const app = express()
 // app.use(cors())
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://localhost:9000'],
+    origin: [
+      'http://localhost:3000',
+      'https://localhost:9000',
+      'https://keytraveler-backend.onrender.com',
+      'https://keytraveler.onrender.com',
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
