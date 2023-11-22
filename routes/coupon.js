@@ -78,9 +78,10 @@ router.get('/couponUsed', authenticate, async (req, res) => {
 })
 
 // 新增優惠碼
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   // 從要求的req.body獲取couponCode
-  const { couponCode, userId } = req.body
+  const userId = req.user.id
+  const { couponCode } = req.body
   if (couponCode == '') {
     return res.json({ message: 'fail', code: '401' })
   }
