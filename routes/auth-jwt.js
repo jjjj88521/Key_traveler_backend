@@ -75,7 +75,11 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', authenticate, (req, res) => {
   // 清除cookie
-  res.clearCookie('accessToken', { httpOnly: true })
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  })
 
   res.json({ message: 'success', code: '200' })
 })

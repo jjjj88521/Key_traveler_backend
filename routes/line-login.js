@@ -49,9 +49,17 @@ router.get('/logout', async function (req, res, next) {
   LineLogin.revoke_access_token(line_access_token)
 
   // 清除cookie
-  res.clearCookie('accessToken', { httpOnly: true })
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  })
   // 因登入過程中也用到session，也會產生 SESSION_ID，所以也要清除
-  res.clearCookie('SESSION_ID', { httpOnly: true })
+  res.clearCookie('SESSION_ID', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  })
 
   return res.json({ message: 'success', code: '200' })
 })
@@ -91,7 +99,11 @@ router.get(
         })
 
         // 使用httpOnly cookie來讓瀏覽器端儲存access token
-        res.cookie('accessToken', accessToken, { httpOnly: true })
+        res.cookie('accessToken', accessToken, {
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+        })
 
         // 傳送access token回應(react可以儲存在state中使用)
         return res.json({
@@ -124,7 +136,11 @@ router.get(
         })
 
         // 使用httpOnly cookie來讓瀏覽器端儲存access token
-        res.cookie('accessToken', accessToken, { httpOnly: true })
+        res.cookie('accessToken', accessToken, {
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+        })
 
         // 傳送access token回應(react可以儲存在state中使用)
         return res.json({
