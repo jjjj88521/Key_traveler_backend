@@ -83,7 +83,7 @@ router.post('/', authenticate, async (req, res) => {
   const userId = req.user.id
   const { couponCode } = req.body
   if (couponCode == '') {
-    return res.json({ message: 'fail', code: '401' })
+    return res.json({ message: 'fail', code: '400' })
   }
   // 先查詢資料庫是否有同couponCode的資料
   const findCouponId = `SELECT id FROM coupon WHERE coupon_code = '${couponCode}'`
@@ -96,14 +96,14 @@ router.post('/', authenticate, async (req, res) => {
   const findIsExpiredCoupon = `SELECT end_date FROM coupon WHERE coupon_code = '${couponCode}'`
   const [result2, fields2] = await pool.execute(findIsExpiredCoupon)
   if (result2[0].end_date < new Date().toISOString().split('T')[0]) {
-    return res.json({ message: 'fail', code: '403' })
+    return res.json({ message: 'Coupon is expired', code: '400' })
   }
 
   // 查詢該優惠碼是否已經輸入過
   const findDuplicateCoupon = `SELECT id FROM user_coupon WHERE coupon_id = ${result[0].id}`
   const [result1, fields1] = await pool.execute(findDuplicateCoupon)
   if (result1.length) {
-    return res.json({ message: 'fail', code: '402' })
+    return res.json({ message: 'Coupon has been used', code: '400' })
   }
 
   // 新增該優惠碼的id到user_coupon

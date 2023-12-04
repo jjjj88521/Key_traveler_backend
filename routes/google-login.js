@@ -1,11 +1,12 @@
 import express from 'express'
 const router = express.Router()
 
-import { findOne, insertOne, count } from '../models/base.js'
+import { findOne, insertOne, count, updateById } from '../models/base.js'
 
 import jsonwebtoken from 'jsonwebtoken'
 // 存取`.env`設定檔案使用
 import 'dotenv/config.js'
+import authenticate from '../middlewares/jwt.js'
 
 // 定義安全的私鑰字串
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
@@ -141,6 +142,31 @@ router.post('/session', async function (req, res, next) {
     req.session.userId = user.id
 
     return res.json({ message: 'success', code: '200', user })
+  }
+})
+
+// 已有帳號綁定 Google 帳號
+router.post('/bind', authenticate, async function (req, res, next) {
+  const userId = req.user.id
+  // get providerData
+  const providerData = req.body
+  console.log(JSON.stringify(providerData))
+  if (!providerData.providerId || !providerData.uid) {
+    return res.json({ message: 'fail', code: '400' })
+  }
+
+  // 1. 先查詢資料庫是否有同 google_uid 的資料
+  // 2-1. 有存在 -> 回傳錯誤，已綁定過
+  // 2-2. 不存在 -> 執行綁定工作
+  const isFound = await count('users', { google_uid: providerData.uid })
+  if (isFound) {
+    return res.json({ message: 'google account has been bound', code: '400' })
+  } else {
+    await updateById('users', userId, {
+      google_uid: providerData.uid,
+    })
+
+    return res.json({ message: 'success', code: '200' })
   }
 })
 

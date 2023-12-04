@@ -97,6 +97,20 @@ router.post('/plusproduct', authenticate, async (req, res) => {
 
   return res.json({ message: 'success', code: '400' })
 })
+// 更新購物車
+router.post('/updateproduct', authenticate, async (req, res) => {
+  // 先找出同 id 的商品
+  const sameProductSql = `SELECT id,amount,spec FROM cart WHERE user_id = ${req.user.id} AND product_id = ${req.body.id}`
+  const { rows } = await executeQuery(sameProductSql)
+  // 找出要的規格的資料，並更新數量或規格
+  rows.find((v) => {
+    if (JSON.stringify(JSON.parse(v.spec)) === req.body.specData) {
+      const updateSql = `UPDATE cart SET amount = ${req.body.quantity} WHERE id = ${v.id}`
+      pool.execute(updateSql)
+      return res.json({ message: 'success', code: '200' })
+    }
+  })
+})
 // 刪除購物車
 router.post('/deleteproduct', authenticate, async (req, res) => {
   const firstSql = `SELECT id,amount,spec FROM cart WHERE user_id = ${req.user.id} AND product_id = ${req.body.id}`

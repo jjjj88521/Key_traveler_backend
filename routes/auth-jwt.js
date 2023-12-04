@@ -5,7 +5,7 @@ import jsonwebtoken from 'jsonwebtoken'
 
 import authenticate from '../middlewares/jwt.js'
 
-import { verifyUser, getUser } from '../models/users.js'
+import { verifyUser, getUser, getUserById } from '../models/users.js'
 
 // 存取`.env`設定檔案使用
 import 'dotenv/config.js'
@@ -21,7 +21,9 @@ router.get('/private', authenticate, (req, res) => {
 
 // 檢查登入狀態用
 router.get('/check-login', authenticate, async (req, res) => {
-  const user = req.user
+  const userId = req.user.id
+  // 使用 id 取得會員資料，而非使用原本 token 內解碼後的資料，以免資料有更新過
+  const user = await getUserById(userId)
   return res.json({ message: 'authorized', user })
 })
 

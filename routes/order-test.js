@@ -10,6 +10,7 @@ router.post('/addProductOrder', authenticate, async (req, res) => {
   // 建立user_order & user_order_list
 
   // user_order
+  // 先找最大的 id
   const firstsql = `SELECT MAX(CAST(SUBSTR(id, 2) AS SIGNED)) + 1 AS next_id FROM user_order;`
   const { rows } = await executeQuery(firstsql)
   const newPId =
