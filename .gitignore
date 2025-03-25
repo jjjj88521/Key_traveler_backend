@@ -42,3 +42,4 @@ public
 
 # ssl
 DigiCertGlobalRootG2.crt.pem
+DigiCertGlobalRootCA.crt.pem

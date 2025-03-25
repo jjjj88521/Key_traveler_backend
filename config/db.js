@@ -7,7 +7,7 @@ import fs from 'fs'
 import 'dotenv/config.js'
 
 // // 資料庫連結資訊
-const serverCa = [fs.readFileSync('./DigiCertGlobalRootG2.crt.pem', 'utf8')]
+const serverCa = [fs.readFileSync('./DigiCertGlobalRootCA.crt.pem', 'utf8')]
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USERNAME,
